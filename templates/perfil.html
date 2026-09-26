@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        CCTE - Perfil
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="lab-banner">
+
+        <strong>ZONA DE TESTE VULNERÁVEL</strong>
+
+        —
+        Ambiente propositalmente vulnerável para fins
+        educacionais e experimentação controlada.
+
+    </div>
+
+
+    <h1>
+        CCTE - Perfil
+    </h1>
+
+
+    <div class="nav">
+
+        <a href="/index">INÍCIO</a> |
+        <a href="/login">LOGIN</a> |
+        <a href="/registro">CADASTRO</a> |
+        <a href="/perfil">PERFIL</a> |
+        <a href="/comentarios">COMENTÁRIOS</a> |
+        <a href="/download">DOWNLOADS</a> |
+        <a href="/modo">MODO</a> |
+        <a href="/forense">FORENSE</a> |
+        <a href="/reset">RESTAURAR</a> |
+        <a href="/logout">SAIR</a>
+
+    </div>
+
+
+    <div class="card">
+
+        <p>
+            <strong>Modo operacional atual:</strong>
+            {{ modo_atual_global }}
+        </p>
+
+    </div>
+
+
+    <div class="container">
+
+
+        <div class="card">
+
+            <h2>
+                Dados do perfil
+            </h2>
+
+            <p>
+                As informações abaixo correspondem ao
+                identificador solicitado pela aplicação.
+            </p>
+
+
+            <div class="perfil-dados">
+
+                <p>
+                    <strong>ID:</strong>
+                    {{ user_id }}
+                </p>
+
+                <p>
+                    <strong>Usuário:</strong>
+                    {{ username }}
+                </p>
+
+                <p>
+                    <strong>Senha:</strong>
+                    {{ password }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Vulnerabilidade demonstrada
+            </h2>
+
+            <p>
+                Esta página utiliza o parâmetro
+                <code>?id=</code>
+                para selecionar diretamente o perfil
+                apresentado ao usuário.
+            </p>
+
+            <p>
+                A implementação foi mantida propositalmente
+                vulnerável para demonstrar
+                <strong>IDOR</strong>
+                (Insecure Direct Object Reference).
+            </p>
+
+            <p>
+                No ambiente vulnerável, a alteração manual
+                do identificador pode permitir que um usuário
+                tente consultar informações associadas a
+                outro registro.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Comportamento educacional
+            </h2>
+
+            <p>
+                No <strong>Modo Educacional</strong>,
+                a aplicação permite que o identificador
+                informado na URL seja utilizado diretamente,
+                possibilitando a experimentação da
+                vulnerabilidade de IDOR.
+            </p>
+
+            <p>
+                Na <strong>Defesa Ativa</strong>,
+                o sistema compara o identificador solicitado
+                com o usuário autenticado e pode negar
+                requisições que caracterizem uma tentativa
+                de acesso indevido.
+            </p>
+
+            <p>
+                Dessa forma, o mesmo procedimento pode ser
+                utilizado para comparar exploração,
+                detecção, registro e resposta defensiva.
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- BOTÃO DE AJUDA -->
+
+    <button
+        class="help-fab"
+        id="helpBtn"
+        type="button"
+        title="Ajuda"
+        aria-label="Abrir ajuda"
+    >
+        ?
+    </button>
+
+
+    <!-- JANELA DE AJUDA -->
+
+    <div
+        class="help-modal"
+        id="helpModal"
+        style="display: none;"
+    >
+
+        <div class="help-card">
+
+
+            <div class="help-header">
+
+                <strong>
+                    PERFIL — VULNERABILIDADE DISPONÍVEL
+                </strong>
+
+                <button
+                    class="help-close"
+                    id="helpClose"
+                    type="button"
+                    aria-label="Fechar ajuda"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="help-body">
+
+
+                <h3>
+                    IDOR
+                </h3>
+
+                <p>
+                    <strong>
+                        Insecure Direct Object Reference
+                    </strong>
+                    ocorre quando a aplicação permite acesso
+                    direto a um recurso por meio de um
+                    identificador sem verificar adequadamente
+                    se o usuário possui autorização para
+                    acessá-lo.
+                </p>
+
+
+                <h3>
+                    Implementação no CCTE
+                </h3>
+
+                <p>
+                    Nesta página, o parâmetro
+                    <code>?id=</code>
+                    é utilizado para selecionar o registro
+                    apresentado.
+                </p>
+
+                <p>
+                    No comportamento vulnerável, o identificador
+                    informado pode ser utilizado sem uma
+                    verificação adequada de propriedade
+                    do recurso.
+                </p>
+
+
+                <h3>
+                    Teste manual
+                </h3>
+
+                <ol>
+
+                    <li>
+                        Faça login normalmente.
+                    </li>
+
+                    <li>
+                        Observe o identificador apresentado
+                        em seu perfil.
+                    </li>
+
+                    <li>
+                        Acrescente ou altere o parâmetro
+                        <code>?id=</code>
+                        na URL.
+                    </li>
+
+                    <li>
+                        Teste outros identificadores
+                        existentes no laboratório.
+                    </li>
+
+                </ol>
+
+
+                <p>
+                    <strong>Exemplos didáticos:</strong>
+                </p>
+
+                <code>
+                    /perfil?id=1
+                </code>
+
+                <br>
+
+                <code>
+                    /perfil?id=2
+                </code>
+
+                <br>
+
+                <code>
+                    /perfil?id=3
+                </code>
+
+
+                <p>
+                    Durante o exercício, observe os dados
+                    retornados, o Audit Log e o Security Log.
+                </p>
+
+
+                <h3>
+                    Comparação dos modos
+                </h3>
+
+                <p>
+                    Execute o procedimento primeiro no
+                    <strong>Modo Educacional</strong>
+                    e posteriormente com a
+                    <strong>Defesa Ativa</strong>.
+                </p>
+
+                <p>
+                    No segundo caso, uma tentativa de acessar
+                    um identificador diferente daquele
+                    associado à sessão pode receber uma
+                    resposta defensiva.
+                </p>
+
+
+                <p
+                    style="
+                        margin-top: 10px;
+                        font-size: 0.9em;
+                        opacity: 0.9;
+                    "
+                >
+                    As técnicas apresentadas devem ser utilizadas
+                    exclusivamente no ambiente local e educacional
+                    disponibilizado pelo CCTE.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SCRIPT DA JANELA DE AJUDA -->
+
+    <script>
+
+        const helpBtn =
+            document.getElementById("helpBtn");
+
+        const helpModal =
+            document.getElementById("helpModal");
+
+        const helpClose =
+            document.getElementById("helpClose");
+
+
+        helpBtn.addEventListener(
+            "click",
+            () => {
+
+                helpModal.style.display = "block";
+
+            }
+        );
+
+
+        helpClose.addEventListener(
+            "click",
+            () => {
+
+                helpModal.style.display = "none";
+
+            }
+        );
+
+
+        helpModal.addEventListener(
+            "click",
+            (e) => {
+
+                if (e.target === helpModal) {
+
+                    helpModal.style.display = "none";
+
+                }
+
+            }
+        );
+
+
+        document.addEventListener(
+            "keydown",
+            (e) => {
+
+                if (e.key === "Escape") {
+
+                    helpModal.style.display = "none";
+
+                }
+
+            }
+        );
+
+    </script>
+
+
+    <footer class="footer">
+
+        <small>
+            Trabalho de Conclusão de Curso —
+            Análise e Desenvolvimento de Sistemas
+        </small>
+
+        <small>
+            Professora Orientadora: Josiane Fontoura
+            &nbsp;|&nbsp;
+            Coordenador do Curso: Marcelo Rosa
+        </small>
+
+        <small>
+            2026 • CCTE • Ambiente educacional —
+            Vinícius Dorneles Ferreira
+        </small>
+
+    </footer>
+
+
+</body>
+
+</html>

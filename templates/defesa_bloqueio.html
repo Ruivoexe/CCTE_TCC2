@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        CCTE - Requisição Bloqueada
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="lab-banner">
+
+        <strong>CCTE — DEFESA ATIVA</strong>
+
+        —
+        Mecanismo automático de resposta defensiva acionado.
+
+    </div>
+
+
+    <h1>
+        CCTE - Defesa Ativa
+    </h1>
+
+
+    <div class="nav">
+
+        <a href="/index">INÍCIO</a> |
+        <a href="/login">LOGIN</a> |
+        <a href="/registro">CADASTRO</a> |
+        <a href="/perfil">PERFIL</a> |
+        <a href="/comentarios">COMENTÁRIOS</a> |
+        <a href="/download">DOWNLOADS</a> |
+        <a href="/modo">MODO</a> |
+        <a href="/forense">FORENSE</a> |
+        <a href="/reset">RESTAURAR</a> |
+        <a href="/logout">SAIR</a>
+
+    </div>
+
+
+    <div class="card">
+
+        <p>
+            <strong>Modo operacional atual:</strong>
+            {{ modo }}
+        </p>
+
+    </div>
+
+
+    <main class="container">
+
+
+        <div class="card">
+
+            <h2>
+                Requisição bloqueada
+            </h2>
+
+            <p>
+                O módulo de monitoramento identificou
+                um comportamento compatível com uma
+                tentativa de
+                <strong>{{ ataque }}</strong>.
+            </p>
+
+            <p>
+                Como o CCTE está operando em
+                <strong>{{ modo }}</strong>,
+                uma resposta defensiva foi aplicada
+                antes que a requisição alcançasse
+                a execução do recurso vulnerável.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Informações da resposta defensiva
+            </h2>
+
+            <p>
+                <strong>Ataque detectado:</strong>
+                {{ ataque }}
+            </p>
+
+            <p>
+                <strong>Ação aplicada:</strong>
+                {{ acao }}
+            </p>
+
+            <p>
+                <strong>Endpoint:</strong>
+                <code>{{ endpoint }}</code>
+            </p>
+
+            <p>
+                <strong>Status HTTP:</strong>
+                403 - Forbidden
+            </p>
+
+            <p>
+                <strong>Resultado:</strong>
+                requisição interrompida antes da
+                execução da funcionalidade vulnerável.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Interpretação educacional
+            </h2>
+
+            <p>
+                No <strong>Modo Educacional</strong>,
+                a mesma tentativa pode alcançar a
+                implementação vulnerável, permitindo
+                observar seu comportamento durante
+                uma exploração controlada.
+            </p>
+
+            <p>
+                Na <strong>Defesa Ativa</strong>,
+                o sistema utiliza a classificação
+                produzida pelo módulo de monitoramento
+                para decidir se uma resposta automática
+                deve ser aplicada.
+            </p>
+
+            <p>
+                Neste caso, a tentativa foi identificada
+                antes da execução da funcionalidade
+                vulnerável e a requisição recebeu uma
+                resposta HTTP
+                <strong>403 - Forbidden</strong>.
+            </p>
+
+            <p>
+                O evento de segurança e a ação defensiva
+                podem ser posteriormente analisados
+                pelo módulo forense do CCTE.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Próximas ações
+            </h2>
+
+            <p>
+                Para observar o comportamento vulnerável,
+                altere o ambiente para
+                <strong>Modo Educacional</strong>
+                e repita o mesmo procedimento.
+            </p>
+
+            <p>
+                Para analisar o evento registrado,
+                consulte o módulo forense.
+            </p>
+
+
+            <p>
+                <a
+                    href="/modo"
+                    class="btn"
+                >
+                    Consultar modos operacionais
+                </a>
+            </p>
+
+
+            <p>
+                <a
+                    href="/forense"
+                    class="btn"
+                >
+                    Abrir Painel Forense
+                </a>
+            </p>
+
+
+            <p>
+                <a
+                    href="/forense/security"
+                    class="btn"
+                >
+                    Consultar Security Log
+                </a>
+            </p>
+
+
+            <p>
+                <a
+                    href="/forense/audit"
+                    class="btn"
+                >
+                    Consultar Audit Log
+                </a>
+            </p>
+
+        </div>
+
+
+    </main>
+
+
+    <footer class="footer">
+
+        <small>
+            Trabalho de Conclusão de Curso —
+            Análise e Desenvolvimento de Sistemas
+        </small>
+
+        <small>
+            Professora Orientadora: Josiane Fontoura
+            &nbsp;|&nbsp;
+            Coordenador do Curso: Marcelo Rosa
+        </small>
+
+        <small>
+            2026 • CCTE • Ambiente educacional —
+            Vinícius Dorneles Ferreira
+        </small>
+
+    </footer>
+
+
+</body>
+
+</html>

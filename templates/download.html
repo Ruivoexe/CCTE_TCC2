@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        CCTE - Downloads
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="lab-banner">
+
+        <strong>ZONA DE TESTE VULNERÁVEL</strong>
+
+        —
+        Ambiente propositalmente vulnerável para fins
+        educacionais e experimentação controlada.
+
+    </div>
+
+
+    <h1>
+        CCTE - Downloads
+    </h1>
+
+
+    <div class="nav">
+
+        <a href="/index">INÍCIO</a> |
+        <a href="/login">LOGIN</a> |
+        <a href="/registro">CADASTRO</a> |
+        <a href="/perfil">PERFIL</a> |
+        <a href="/comentarios">COMENTÁRIOS</a> |
+        <a href="/download">DOWNLOADS</a> |
+        <a href="/modo">MODO</a> |
+        <a href="/forense">FORENSE</a> |
+        <a href="/reset">RESTAURAR</a> |
+        <a href="/logout">SAIR</a>
+
+    </div>
+
+
+    <div class="card">
+
+        <p>
+            <strong>Modo operacional atual:</strong>
+            {{ modo_atual_global }}
+        </p>
+
+    </div>
+
+
+    <main class="container">
+
+
+        <div class="card">
+
+            <h2>
+                Arquivos disponíveis
+            </h2>
+
+            <p>
+                Os arquivos abaixo representam recursos
+                disponibilizados normalmente pela interface
+                do laboratório.
+            </p>
+
+            <p>
+                Eles incluem documentação do projeto e
+                materiais acadêmicos relacionados ao
+                desenvolvimento do CCTE.
+            </p>
+
+
+            <div class="downloads-lista">
+
+
+                <p>
+
+                    <a href="/download?file=files/README.md">
+                        README do projeto
+                    </a>
+
+                </p>
+
+
+                <p>
+
+                    <a href="/download?file=files/tcc1.pdf">
+                        Trabalho de Conclusão de Curso — TCC I
+                    </a>
+
+                </p>
+
+
+                <p>
+
+                    <a href="/download?file=files/tcc2.pdf">
+                        Trabalho de Conclusão de Curso — TCC II
+                    </a>
+
+                </p>
+
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Vulnerabilidades demonstradas
+            </h2>
+
+            <p>
+                O mecanismo de download utiliza o parâmetro
+                <code>?file=</code>
+                para informar à aplicação qual arquivo
+                deve ser solicitado.
+            </p>
+
+            <p>
+                No comportamento vulnerável, o valor informado
+                é utilizado diretamente para localizar o recurso,
+                permitindo estudar vulnerabilidades de
+                <strong>Path Traversal</strong>
+                e
+                <strong>File Disclosure</strong>.
+            </p>
+
+
+            <h3>
+                File Disclosure
+            </h3>
+
+            <p>
+                Ocorre quando a aplicação permite acessar
+                diretamente um arquivo que existe no ambiente,
+                mas que não deveria estar disponível por meio
+                da interface normal.
+            </p>
+
+            <p>
+                No CCTE, determinados arquivos permanecem
+                propositalmente ocultos da listagem de downloads
+                para permitir esse tipo de exercício.
+            </p>
+
+
+            <h3>
+                Path Traversal
+            </h3>
+
+            <p>
+                Ocorre quando elementos do caminho,
+                como <code>../</code>,
+                são utilizados para navegar para fora
+                do diretório inicialmente esperado.
+            </p>
+
+            <p>
+                Isso pode permitir a tentativa de acesso
+                a arquivos localizados em outras partes
+                da estrutura do projeto.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Comportamento educacional
+            </h2>
+
+            <p>
+                No <strong>Modo Educacional</strong>,
+                o caminho solicitado pode alcançar diretamente
+                a implementação vulnerável, permitindo observar
+                o comportamento do acesso a arquivos.
+            </p>
+
+            <p>
+                Tentativas de Path Traversal ou acesso a arquivos
+                considerados sensíveis continuam sendo monitoradas,
+                classificadas e registradas.
+            </p>
+
+            <p>
+                Na <strong>Defesa Ativa</strong>,
+                o mecanismo de monitoramento pode bloquear
+                requisições classificadas como
+                <strong>Path Traversal</strong>
+                ou negar o acesso a arquivos classificados como
+                <strong>File Disclosure</strong>.
+            </p>
+
+            <p>
+                Dessa forma, o mesmo teste pode ser repetido
+                nos dois modos para comparar exploração,
+                detecção e resposta defensiva.
+            </p>
+
+        </div>
+
+
+    </main>
+
+
+    <!-- BOTÃO DE AJUDA -->
+
+    <button
+        class="help-fab"
+        id="helpBtn"
+        type="button"
+        title="Ajuda"
+        aria-label="Abrir ajuda"
+    >
+        ?
+    </button>
+
+
+    <!-- JANELA DE AJUDA -->
+
+    <div
+        class="help-modal"
+        id="helpModal"
+        style="display: none;"
+    >
+
+        <div class="help-card">
+
+
+            <div class="help-header">
+
+                <strong>
+                    DOWNLOADS — VULNERABILIDADES DISPONÍVEIS
+                </strong>
+
+                <button
+                    class="help-close"
+                    id="helpClose"
+                    type="button"
+                    aria-label="Fechar ajuda"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="help-body">
+
+
+                <h3>
+                    File Disclosure
+                </h3>
+
+                <p>
+                    File Disclosure ocorre quando um arquivo
+                    que não faz parte dos recursos normalmente
+                    apresentados ao usuário pode ser solicitado
+                    diretamente pela aplicação.
+                </p>
+
+                <p>
+                    Nesta página, apenas alguns arquivos
+                    são apresentados como downloads legítimos.
+                    Entretanto, outros recursos podem existir
+                    dentro do diretório utilizado pelo sistema.
+                </p>
+
+                <p>
+                    <strong>Exemplo didático:</strong>
+                </p>
+
+                <pre>/download?file=files/users.txt</pre>
+
+                <p>
+                    O arquivo
+                    <code>users.txt</code>
+                    não aparece na lista normal de downloads.
+                </p>
+
+                <p>
+                    A tentativa de acessá-lo diretamente permite
+                    comparar um recurso autorizado pela interface
+                    com um arquivo existente, porém oculto
+                    da navegação normal.
+                </p>
+
+
+                <h3>
+                    Path Traversal
+                </h3>
+
+                <p>
+                    Path Traversal ocorre quando o caminho
+                    fornecido pelo usuário contém referências
+                    destinadas a sair do diretório esperado.
+                </p>
+
+                <p>
+                    Um padrão típico utilizado durante
+                    a experimentação é:
+                </p>
+
+                <pre>../</pre>
+
+                <p>
+                    Considerando que os downloads legítimos
+                    utilizam o diretório
+                    <code>files/</code>,
+                    uma tentativa pode ser:
+                </p>
+
+                <pre>/download?file=files/../app.py</pre>
+
+                <p>
+                    Nesse exemplo,
+                    <code>../</code>
+                    representa uma tentativa de sair do diretório
+                    <code>files/</code>
+                    e alcançar um recurso localizado na raiz
+                    do projeto.
+                </p>
+
+                <p>
+                    O resultado depende da estrutura dos
+                    diretórios e do diretório a partir do qual
+                    o servidor Flask foi iniciado.
+                </p>
+
+
+                <h3>
+                    Teste manual
+                </h3>
+
+                <ol>
+
+                    <li>
+                        Faça inicialmente o download de um
+                        dos arquivos legítimos apresentados
+                        na página.
+                    </li>
+
+                    <li>
+                        Observe o parâmetro
+                        <code>?file=</code>
+                        presente na URL.
+                    </li>
+
+                    <li>
+                        Observe que todos os arquivos legítimos
+                        apresentados utilizam caminhos iniciados
+                        por
+                        <code>files/</code>.
+                    </li>
+
+                    <li>
+                        Compare um arquivo legítimo com uma
+                        solicitação direta ao recurso
+                        <code>files/users.txt</code>.
+                    </li>
+
+                    <li>
+                        Experimente posteriormente um caminho
+                        contendo
+                        <code>../</code>
+                        e observe a resposta da aplicação.
+                    </li>
+
+                    <li>
+                        Consulte o
+                        <strong>Security Log</strong>
+                        para verificar como a tentativa foi
+                        classificada.
+                    </li>
+
+                    <li>
+                        Consulte também o
+                        <strong>Audit Log</strong>
+                        para verificar os eventos operacionais
+                        associados à solicitação.
+                    </li>
+
+                </ol>
+
+
+                <h3>
+                    Comparação dos modos
+                </h3>
+
+                <p>
+                    No <strong>Modo Educacional</strong>,
+                    a solicitação pode alcançar a implementação
+                    vulnerável mesmo quando o comportamento
+                    é identificado pelo monitoramento.
+                </p>
+
+                <p>
+                    Na <strong>Defesa Ativa</strong>,
+                    tentativas reconhecidas como
+                    <strong>Path Traversal</strong>
+                    podem ser bloqueadas e solicitações
+                    classificadas como
+                    <strong>File Disclosure</strong>
+                    podem ser negadas.
+                </p>
+
+
+                <p
+                    style="
+                        margin-top: 10px;
+                        font-size: 0.9em;
+                        opacity: 0.9;
+                    "
+                >
+                    As técnicas apresentadas devem ser utilizadas
+                    exclusivamente no ambiente local e educacional
+                    disponibilizado pelo CCTE.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SCRIPT DA JANELA DE AJUDA -->
+
+    <script>
+
+        const helpBtn =
+            document.getElementById("helpBtn");
+
+        const helpModal =
+            document.getElementById("helpModal");
+
+        const helpClose =
+            document.getElementById("helpClose");
+
+
+        helpBtn.addEventListener(
+            "click",
+            () => {
+
+                helpModal.style.display = "block";
+
+            }
+        );
+
+
+        helpClose.addEventListener(
+            "click",
+            () => {
+
+                helpModal.style.display = "none";
+
+            }
+        );
+
+
+        helpModal.addEventListener(
+            "click",
+            (e) => {
+
+                if (e.target === helpModal) {
+
+                    helpModal.style.display = "none";
+
+                }
+
+            }
+        );
+
+
+        document.addEventListener(
+            "keydown",
+            (e) => {
+
+                if (e.key === "Escape") {
+
+                    helpModal.style.display = "none";
+
+                }
+
+            }
+        );
+
+    </script>
+
+
+    <footer class="footer">
+
+        <small>
+            Trabalho de Conclusão de Curso —
+            Análise e Desenvolvimento de Sistemas
+        </small>
+
+        <small>
+            Professora Orientadora: Josiane Fontoura
+            &nbsp;|&nbsp;
+            Coordenador do Curso: Marcelo Rosa
+        </small>
+
+        <small>
+            2026 • CCTE • Ambiente educacional —
+            Vinícius Dorneles Ferreira
+        </small>
+
+    </footer>
+
+
+</body>
+
+</html>

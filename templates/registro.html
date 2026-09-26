@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        CCTE - Cadastro
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="lab-banner">
+
+        <strong>ZONA DE TESTE VULNERÁVEL</strong>
+
+        —
+        Cadastro propositalmente vulnerável para fins
+        educacionais e experimentação controlada.
+
+    </div>
+
+
+    <h1>
+        CCTE - Cadastro
+    </h1>
+
+
+    <div class="nav">
+
+        <a href="/index">INÍCIO</a> |
+        <a href="/login">LOGIN</a> |
+        <a href="/registro">CADASTRO</a> |
+        <a href="/perfil">PERFIL</a> |
+        <a href="/comentarios">COMENTÁRIOS</a> |
+        <a href="/download">DOWNLOADS</a> |
+        <a href="/modo">MODO</a> |
+        <a href="/forense">FORENSE</a> |
+        <a href="/reset">RESTAURAR</a> |
+        <a href="/logout">SAIR</a>
+
+    </div>
+
+
+    <div class="card">
+
+        <p>
+            <strong>Modo operacional atual:</strong>
+            {{ modo_atual_global }}
+        </p>
+
+    </div>
+
+
+    <div class="container">
+
+
+        <div class="card">
+
+            <h2>
+                Cadastro de usuário
+            </h2>
+
+            <p>
+                Utilize este formulário para adicionar
+                um novo usuário ao ambiente de laboratório.
+            </p>
+
+            <p>
+                Esta área contém uma vulnerabilidade
+                de <strong>SQL Injection</strong>
+                implementada intencionalmente na operação
+                de inserção dos dados.
+            </p>
+
+
+            <form
+                method="POST"
+                action="/registro"
+            >
+
+                <label for="username">
+                    Nome de usuário
+                </label>
+
+                <br>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Novo usuário"
+                    autocomplete="username"
+                >
+
+
+                <br><br>
+
+
+                <label for="password">
+                    Senha
+                </label>
+
+                <br>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Nova senha"
+                    autocomplete="new-password"
+                >
+
+
+                <br><br>
+
+
+                <button
+                    type="submit"
+                    class="btn"
+                >
+                    Cadastrar
+                </button>
+
+            </form>
+
+
+            {% if erro %}
+
+                <div class="card">
+
+                    <p>
+                        <strong>
+                            Erro no cadastro:
+                        </strong>
+
+                        {{ erro }}
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+
+            <p>
+                Já possui uma conta?
+
+                <a href="/login">
+                    Voltar para login
+                </a>
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Comportamento educacional
+            </h2>
+
+            <p>
+                No <strong>Modo Educacional</strong>,
+                a operação vulnerável permanece disponível
+                para experimentação, enquanto as entradas
+                suspeitas são monitoradas e registradas.
+            </p>
+
+            <p>
+                Na <strong>Defesa Ativa</strong>,
+                tentativas identificadas como
+                SQL Injection podem ser detectadas
+                e bloqueadas antes que a operação vulnerável
+                seja executada.
+            </p>
+
+            <p>
+                A comparação entre os dois modos permite
+                observar a diferença entre a presença da
+                vulnerabilidade e a aplicação de uma
+                resposta defensiva.
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- BOTÃO DE AJUDA -->
+
+    <button
+        class="help-fab"
+        id="helpBtn"
+        type="button"
+        title="Ajuda"
+        aria-label="Abrir ajuda"
+    >
+        ?
+    </button>
+
+
+    <!-- JANELA DE AJUDA -->
+
+    <div
+        class="help-modal"
+        id="helpModal"
+        style="display: none;"
+    >
+
+        <div class="help-card">
+
+
+            <div class="help-header">
+
+                <strong>
+                    CADASTRO — VULNERABILIDADE DISPONÍVEL
+                </strong>
+
+                <button
+                    class="help-close"
+                    id="helpClose"
+                    type="button"
+                    aria-label="Fechar ajuda"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="help-body">
+
+
+                <h3>
+                    SQL Injection
+                </h3>
+
+                <p>
+                    O cadastro utiliza uma operação
+                    <code>INSERT</code>
+                    construída diretamente com os valores
+                    fornecidos pelo usuário.
+                </p>
+
+                <p>
+                    Essa implementação intencional permite
+                    estudar os riscos associados à construção
+                    de comandos SQL sem a separação adequada
+                    entre dados e instruções.
+                </p>
+
+
+                <h3>
+                    Teste manual
+                </h3>
+
+                <p>
+                    Observe o comportamento da aplicação
+                    ao fornecer caracteres que interferem
+                    na sintaxe da instrução SQL.
+                </p>
+
+                <p>
+                    <strong>Exemplo didático:</strong>
+                </p>
+
+                <code>
+                    teste'
+                </code>
+
+                <p>
+                    Durante o teste, observe:
+                    a resposta da aplicação, as mensagens
+                    apresentadas no terminal e os registros
+                    produzidos pelo módulo de segurança.
+                </p>
+
+
+                <h3>
+                    Comparação dos modos
+                </h3>
+
+                <p>
+                    No <strong>Modo Educacional</strong>,
+                    a entrada é encaminhada para a implementação
+                    vulnerável.
+                </p>
+
+                <p>
+                    Com a <strong>Defesa Ativa</strong>,
+                    entradas identificadas como SQL Injection
+                    podem receber uma resposta defensiva
+                    antes da execução da operação.
+                </p>
+
+
+                <p
+                    style="
+                        margin-top: 10px;
+                        font-size: 0.9em;
+                        opacity: 0.9;
+                    "
+                >
+                    As técnicas apresentadas devem ser utilizadas
+                    exclusivamente no ambiente local e educacional
+                    disponibilizado pelo CCTE.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SCRIPT DA JANELA DE AJUDA -->
+
+    <script>
+
+        const helpBtn =
+            document.getElementById("helpBtn");
+
+        const helpModal =
+            document.getElementById("helpModal");
+
+        const helpClose =
+            document.getElementById("helpClose");
+
+
+        helpBtn.addEventListener(
+            "click",
+            () => {
+
+                helpModal.style.display = "block";
+
+            }
+        );
+
+
+        helpClose.addEventListener(
+            "click",
+            () => {
+
+                helpModal.style.display = "none";
+
+            }
+        );
+
+
+        helpModal.addEventListener(
+            "click",
+            (e) => {
+
+                if (e.target === helpModal) {
+
+                    helpModal.style.display = "none";
+
+                }
+
+            }
+        );
+
+
+        document.addEventListener(
+            "keydown",
+            (e) => {
+
+                if (e.key === "Escape") {
+
+                    helpModal.style.display = "none";
+
+                }
+
+            }
+        );
+
+    </script>
+
+
+    <footer class="footer">
+
+        <small>
+            Trabalho de Conclusão de Curso —
+            Análise e Desenvolvimento de Sistemas
+        </small>
+
+        <small>
+            Professora Orientadora: Josiane Fontoura
+            &nbsp;|&nbsp;
+            Coordenador do Curso: Marcelo Rosa
+        </small>
+
+        <small>
+            2026 • CCTE • Ambiente educacional —
+            Vinícius Dorneles Ferreira
+        </small>
+
+    </footer>
+
+
+</body>
+
+</html>

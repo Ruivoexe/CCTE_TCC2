@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>CCTE - Início</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+    <div class="lab-banner">
+        <b>ZONA DE TESTE VULNERÁVEL</b>
+        — Ambiente propositalmente vulnerável para fins
+        educacionais e experimentação controlada.
+    </div>
+
+
+    <h1>CCTE - Campo de Treinamento Educacional</h1>
+
+
+    <div class="nav">
+        <a href="/index">INÍCIO</a> |
+        <a href="/login">LOGIN</a> |
+        <a href="/registro">CADASTRO</a> |
+        <a href="/perfil">PERFIL</a> |
+        <a href="/comentarios">COMENTÁRIOS</a> |
+        <a href="/download">DOWNLOADS</a> |
+        <a href="/modo">MODO</a> |
+        <a href="/forense">FORENSE</a> |
+        <a href="/reset">RESTAURAR</a> |
+        <a href="/logout">SAIR</a>
+    </div>
+
+
+    <div class="card">
+
+        <p>
+            <b>Modo operacional atual:</b>
+            {{ modo_atual_global }}
+        </p>
+
+    </div>
+
+
+    <div class="container">
+
+        <h2>Laboratório de Segurança Web</h2>
+
+        <p>
+            O CCTE é um ambiente educacional desenvolvido para
+            demonstrar vulnerabilidades em aplicações web de forma
+            controlada. O laboratório permite realizar experimentos,
+            observar técnicas de exploração, acompanhar mecanismos
+            de detecção e defesa e analisar os registros produzidos
+            durante as atividades.
+        </p>
+
+
+        <div class="card-grid">
+
+            <div class="card">
+
+                <h3>Cadastro</h3>
+
+                <p>
+                    Área destinada ao estudo de
+                    <b>SQL Injection</b> durante o processo
+                    de registro de usuários.
+                </p>
+
+                <a href="/registro">
+                    Acessar
+                </a>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Login</h3>
+
+                <p>
+                    Área destinada ao estudo de
+                    <b>SQL Injection</b> e
+                    <b>Brute Force</b> relacionados
+                    ao processo de autenticação.
+                </p>
+
+                <a href="/login">
+                    Acessar
+                </a>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Perfil</h3>
+
+                <p>
+                    Área destinada ao estudo de
+                    <b>IDOR</b>
+                    (Insecure Direct Object Reference),
+                    permitindo observar acessos indevidos
+                    a recursos associados a outros usuários.
+                </p>
+
+                <a href="/perfil">
+                    Acessar
+                </a>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Comentários</h3>
+
+                <p>
+                    Área destinada ao estudo de
+                    <b>XSS</b>
+                    (Cross-Site Scripting), permitindo
+                    inserir e executar conteúdo de script
+                    armazenado pela aplicação.
+                </p>
+
+                <a href="/comentarios">
+                    Acessar
+                </a>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Downloads</h3>
+
+                <p>
+                    Área destinada ao estudo de
+                    <b>Path Traversal</b> e
+                    <b>File Disclosure</b>,
+                    relacionados ao acesso indevido
+                    a arquivos disponíveis no servidor.
+                </p>
+
+                <a href="/download">
+                    Acessar
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- BOTÃO DE AJUDA -->
+
+    <button
+        class="help-fab"
+        id="helpBtn"
+        type="button"
+        title="Ajuda"
+        aria-label="Abrir ajuda"
+    >
+        ?
+    </button>
+
+
+    <!-- JANELA DE AJUDA -->
+
+    <div
+        class="help-modal"
+        id="helpModal"
+        style="display: none;"
+    >
+
+        <div class="help-card">
+
+            <div class="help-header">
+
+                <b>INÍCIO — VISÃO GERAL</b>
+
+                <button
+                    class="help-close"
+                    id="helpClose"
+                    type="button"
+                    aria-label="Fechar ajuda"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="help-body">
+
+                <p>
+                    <b>Sobre o laboratório:</b>
+                    cada área do CCTE contém vulnerabilidades
+                    implementadas intencionalmente para estudo,
+                    experimentação e observação em ambiente local
+                    e controlado.
+                </p>
+
+                <p>
+                    As atividades permitem comparar o comportamento
+                    vulnerável da aplicação com os mecanismos de
+                    monitoramento, detecção, resposta defensiva e
+                    análise forense disponíveis no sistema.
+                </p>
+
+                <ul>
+
+                    <li>
+                        <b>Cadastro:</b>
+                        SQL Injection
+                    </li>
+
+                    <li>
+                        <b>Login:</b>
+                        SQL Injection e Brute Force
+                    </li>
+
+                    <li>
+                        <b>Perfil:</b>
+                        IDOR
+                        (Insecure Direct Object Reference)
+                    </li>
+
+                    <li>
+                        <b>Comentários:</b>
+                        XSS
+                        (Cross-Site Scripting)
+                    </li>
+
+                    <li>
+                        <b>Downloads:</b>
+                        Path Traversal e File Disclosure
+                    </li>
+
+                </ul>
+
+                <p
+                    style="
+                        margin-top: 10px;
+                        font-size: 0.9em;
+                        opacity: 0.9;
+                    "
+                >
+                    As técnicas apresentadas devem ser utilizadas
+                    exclusivamente no ambiente local e educacional
+                    disponibilizado pelo CCTE.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SCRIPT DA JANELA DE AJUDA -->
+
+    <script>
+
+        const helpBtn =
+            document.getElementById("helpBtn");
+
+        const helpModal =
+            document.getElementById("helpModal");
+
+        const helpClose =
+            document.getElementById("helpClose");
+
+
+        helpBtn.addEventListener(
+            "click",
+            () => {
+
+                helpModal.style.display = "block";
+
+            }
+        );
+
+
+        helpClose.addEventListener(
+            "click",
+            () => {
+
+                helpModal.style.display = "none";
+
+            }
+        );
+
+
+        helpModal.addEventListener(
+            "click",
+            (e) => {
+
+                if (e.target === helpModal) {
+
+                    helpModal.style.display = "none";
+
+                }
+
+            }
+        );
+
+
+        document.addEventListener(
+            "keydown",
+            (e) => {
+
+                if (e.key === "Escape") {
+
+                    helpModal.style.display = "none";
+
+                }
+
+            }
+        );
+
+    </script>
+
+
+    <footer class="footer">
+
+        <small>
+            Trabalho de Conclusão de Curso —
+            Análise e Desenvolvimento de Sistemas
+        </small>
+
+        <small>
+            Professora Orientadora: Josiane Fontoura
+            &nbsp;|&nbsp;
+            Coordenador do Curso: Marcelo Rosa
+        </small>
+
+        <small>
+            2026 • CCTE • Ambiente educacional -
+            Vinícius Dorneles Ferreira
+        </small>
+
+    </footer>
+
+</body>
+
+</html>

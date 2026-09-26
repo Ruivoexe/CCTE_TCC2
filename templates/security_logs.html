@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        CCTE - Security Log
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="lab-banner">
+
+        <strong>CCTE — ANÁLISE FORENSE</strong>
+
+        —
+        Visualização dos eventos de segurança
+        detectados pelo ambiente.
+
+    </div>
+
+
+    <h1>
+        CCTE - Security Log
+    </h1>
+
+
+    <div class="nav">
+
+        <a href="/index">INÍCIO</a> |
+        <a href="/login">LOGIN</a> |
+        <a href="/registro">CADASTRO</a> |
+        <a href="/perfil">PERFIL</a> |
+        <a href="/comentarios">COMENTÁRIOS</a> |
+        <a href="/download">DOWNLOADS</a> |
+        <a href="/modo">MODO</a> |
+        <a href="/forense">FORENSE</a> |
+        <a href="/reset">RESTAURAR</a> |
+        <a href="/logout">SAIR</a>
+
+    </div>
+
+
+    <div class="card">
+
+        <p>
+            <strong>Modo operacional atual:</strong>
+            {{ modo_atual_global }}
+        </p>
+
+    </div>
+
+
+    <main class="container">
+
+
+        <div class="card">
+
+            <h2>
+                Eventos de segurança
+            </h2>
+
+            <p>
+                O Security Log apresenta requisições
+                classificadas pelo mecanismo de monitoramento
+                como comportamentos suspeitos ou tentativas
+                de ataque.
+            </p>
+
+            <p>
+                Os registros permitem analisar o tipo
+                identificado, a origem da requisição,
+                o endpoint atingido e os dados associados
+                ao evento.
+            </p>
+
+            <p>
+                <strong>Total de eventos exibidos:</strong>
+                {{ eventos | length }}
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Navegação forense
+            </h2>
+
+            <p>
+
+                <a
+                    href="/forense"
+                    class="btn"
+                >
+                    Painel Forense
+                </a>
+
+            </p>
+
+            <p>
+
+                <a
+                    href="/forense/audit"
+                    class="btn"
+                >
+                    Audit Log
+                </a>
+
+            </p>
+
+            <p>
+
+                <a
+                    href="/forense/security"
+                    class="btn"
+                >
+                    Security Log
+                </a>
+
+            </p>
+
+            <p>
+
+                <a
+                    href="/forense/relatorio"
+                    class="btn"
+                >
+                    Relatório Forense
+                </a>
+
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Filtrar eventos
+            </h2>
+
+            <p>
+                Os filtros podem ser utilizados
+                individualmente ou combinados para restringir
+                o conjunto de eventos apresentados.
+            </p>
+
+
+            <form
+                method="GET"
+                action="/forense/security"
+            >
+
+
+                <div>
+
+                    <label for="tipo">
+
+                        <strong>
+                            Tipo de ataque:
+                        </strong>
+
+                    </label>
+
+                    <br>
+
+                    <input
+                        type="text"
+                        id="tipo"
+                        name="tipo"
+                        placeholder="Ex.: IDOR, XSS, SQL INJECTION"
+                        value="{{ tipo_filtro }}"
+                    >
+
+                </div>
+
+
+                <br>
+
+
+                <div>
+
+                    <label for="ip">
+
+                        <strong>
+                            Endereço IP:
+                        </strong>
+
+                    </label>
+
+                    <br>
+
+                    <input
+                        type="text"
+                        id="ip"
+                        name="ip"
+                        placeholder="Ex.: 127.0.0.1"
+                        value="{{ ip_filtro }}"
+                    >
+
+                </div>
+
+
+                <br>
+
+
+                <div>
+
+                    <label for="endpoint">
+
+                        <strong>
+                            Endpoint:
+                        </strong>
+
+                    </label>
+
+                    <br>
+
+                    <input
+                        type="text"
+                        id="endpoint"
+                        name="endpoint"
+                        placeholder="Ex.: /perfil, /login, /download"
+                        value="{{ endpoint_filtro }}"
+                    >
+
+                </div>
+
+
+                <br>
+
+
+                <button
+                    type="submit"
+                    class="btn"
+                >
+                    Filtrar
+                </button>
+
+
+                <a
+                    href="/forense/security"
+                    class="btn"
+                >
+                    Limpar filtros
+                </a>
+
+            </form>
+
+
+            {% if tipo_filtro or ip_filtro or endpoint_filtro %}
+
+                <hr>
+
+                <h3>
+                    Filtros ativos
+                </h3>
+
+
+                {% if tipo_filtro %}
+
+                    <p>
+                        <strong>Tipo:</strong>
+                        {{ tipo_filtro }}
+                    </p>
+
+                {% endif %}
+
+
+                {% if ip_filtro %}
+
+                    <p>
+                        <strong>IP:</strong>
+                        {{ ip_filtro }}
+                    </p>
+
+                {% endif %}
+
+
+                {% if endpoint_filtro %}
+
+                    <p>
+                        <strong>Endpoint:</strong>
+                        {{ endpoint_filtro }}
+                    </p>
+
+                {% endif %}
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Registros encontrados
+            </h2>
+
+
+            {% if eventos %}
+
+
+                <table class="log-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Data / Hora
+                            </th>
+
+                            <th>
+                                IP
+                            </th>
+
+                            <th>
+                                Endpoint
+                            </th>
+
+                            <th>
+                                Tipo
+                            </th>
+
+                            <th>
+                                Payload
+                            </th>
+
+                            <th>
+                                Argumentos
+                            </th>
+
+                            <th>
+                                Usuário da sessão
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for evento in eventos %}
+
+                            <tr>
+
+                                <td>
+                                    {{ evento.timestamp }}
+                                </td>
+
+
+                                <td>
+                                    {{ evento.ip }}
+                                </td>
+
+
+                                <td>
+                                    <code>
+                                        {{ evento.endpoint }}
+                                    </code>
+                                </td>
+
+
+                                <td>
+
+                                    <strong>
+                                        {{ evento.tipo }}
+                                    </strong>
+
+                                </td>
+
+
+                                <td>
+
+                                    {% if evento.payload %}
+
+                                        {{ evento.payload }}
+
+                                    {% else %}
+
+                                        -
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <td>
+
+                                    {% if evento.args %}
+
+                                        {{ evento.args }}
+
+                                    {% else %}
+
+                                        -
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <td>
+
+                                    {% if evento.session_user
+                                          and evento.session_user != "None" %}
+
+                                        {{ evento.session_user }}
+
+                                    {% else %}
+
+                                        Não autenticado
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+
+            {% else %}
+
+
+                <h3>
+                    Nenhum evento encontrado
+                </h3>
+
+
+                {% if tipo_filtro or ip_filtro or endpoint_filtro %}
+
+                    <p>
+                        Não foram encontrados eventos de segurança
+                        correspondentes aos filtros informados.
+                    </p>
+
+
+                    {% if tipo_filtro %}
+
+                        <p>
+                            <strong>Tipo pesquisado:</strong>
+                            {{ tipo_filtro }}
+                        </p>
+
+                    {% endif %}
+
+
+                    {% if ip_filtro %}
+
+                        <p>
+                            <strong>IP pesquisado:</strong>
+                            {{ ip_filtro }}
+                        </p>
+
+                    {% endif %}
+
+
+                    {% if endpoint_filtro %}
+
+                        <p>
+                            <strong>Endpoint pesquisado:</strong>
+                            {{ endpoint_filtro }}
+                        </p>
+
+                    {% endif %}
+
+
+                    <a
+                        href="/forense/security"
+                        class="btn"
+                    >
+                        Mostrar todos os eventos
+                    </a>
+
+
+                {% else %}
+
+                    <p>
+                        Nenhum evento de segurança foi
+                        registrado nesta sessão do laboratório.
+                    </p>
+
+                {% endif %}
+
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Categorias monitoradas
+            </h2>
+
+            <p>
+                O mecanismo de monitoramento do CCTE
+                classifica atualmente eventos relacionados
+                às seguintes categorias:
+            </p>
+
+            <ul>
+
+                <li>
+                    <strong>SQL Injection</strong>
+                </li>
+
+                <li>
+                    <strong>XSS</strong>
+                    (Cross-Site Scripting)
+                </li>
+
+                <li>
+                    <strong>IDOR</strong>
+                    (Insecure Direct Object Reference)
+                </li>
+
+                <li>
+                    <strong>Path Traversal</strong>
+                </li>
+
+                <li>
+                    <strong>File Disclosure</strong>
+                </li>
+
+                <li>
+                    <strong>Brute Force</strong>
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Interpretação do Security Log
+            </h2>
+
+            <p>
+                O Security Log representa a camada de
+                <strong>detecção</strong> do CCTE.
+            </p>
+
+            <p>
+                Um registro neste arquivo indica que uma
+                requisição apresentou características
+                compatíveis com uma das categorias
+                monitoradas pelo laboratório.
+            </p>
+
+            <p>
+                A existência do registro não significa,
+                por si só, que uma mitigação foi aplicada.
+            </p>
+
+            <p>
+                No <strong>Modo Educacional</strong>,
+                um ataque pode ser detectado e registrado
+                enquanto a requisição continua até a
+                implementação vulnerável.
+            </p>
+
+            <p>
+                Na <strong>Defesa Ativa</strong>,
+                a mesma detecção pode resultar em uma
+                resposta automática, como bloqueio,
+                rejeição de conteúdo ou limitação
+                temporária de requisições.
+            </p>
+
+            <p>
+                Essas ações defensivas são registradas
+                separadamente no <strong>Audit Log</strong>.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Dados registrados
+            </h2>
+
+            <p>
+                Cada evento pode conter informações como:
+            </p>
+
+            <ul>
+
+                <li>
+                    data e horário;
+                </li>
+
+                <li>
+                    endereço IP;
+                </li>
+
+                <li>
+                    método HTTP e endpoint;
+                </li>
+
+                <li>
+                    categoria de ataque;
+                </li>
+
+                <li>
+                    payload associado à requisição;
+                </li>
+
+                <li>
+                    argumentos da URL;
+                </li>
+
+                <li>
+                    identificador do usuário presente
+                    na sessão, quando disponível.
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Segurança da interface forense
+            </h2>
+
+            <p>
+                Os payloads registrados são apresentados
+                como conteúdo textual nesta interface.
+            </p>
+
+            <p>
+                Dessa forma, códigos registrados durante
+                testes de XSS são exibidos para análise
+                sem serem interpretados como conteúdo
+                executável pela página forense.
+            </p>
+
+            <p>
+                Isso permite examinar o conteúdo suspeito
+                preservando a integridade da interface
+                utilizada para análise.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Uso dos filtros
+            </h2>
+
+            <p>
+                O filtro por <strong>tipo</strong>
+                permite localizar uma categoria específica,
+                como:
+            </p>
+
+            <p>
+                <code>SQL INJECTION</code>
+            </p>
+
+            <p>
+                <code>XSS</code>
+            </p>
+
+            <p>
+                <code>IDOR</code>
+            </p>
+
+            <p>
+                <code>BRUTEFORCE</code>
+            </p>
+
+
+            <p>
+                O filtro por <strong>IP</strong>
+                permite investigar atividades originadas
+                de determinado endereço.
+            </p>
+
+            <p>
+                O filtro por <strong>endpoint</strong>
+                permite concentrar a análise em uma
+                funcionalidade específica, como:
+            </p>
+
+            <p>
+                <code>/login</code>
+            </p>
+
+            <p>
+                <code>/perfil</code>
+            </p>
+
+            <p>
+                <code>/comentarios</code>
+            </p>
+
+            <p>
+                <code>/download</code>
+            </p>
+
+        </div>
+
+
+    </main>
+
+
+    <footer class="footer">
+
+        <small>
+            Trabalho de Conclusão de Curso —
+            Análise e Desenvolvimento de Sistemas
+        </small>
+
+        <small>
+            Professora Orientadora: Josiane Fontoura
+            &nbsp;|&nbsp;
+            Coordenador do Curso: Marcelo Rosa
+        </small>
+
+        <small>
+            2026 • CCTE • Ambiente educacional —
+            Vinícius Dorneles Ferreira
+        </small>
+
+    </footer>
+
+
+</body>
+
+</html>

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        CCTE - Restaurar Ambiente
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="lab-banner">
+
+        <strong>CCTE — RESTAURAÇÃO DO AMBIENTE</strong>
+
+        —
+        Ferramenta para retornar o laboratório
+        ao seu estado inicial.
+
+    </div>
+
+
+    <h1>
+        CCTE - Restaurar Ambiente
+    </h1>
+
+
+    <div class="nav">
+
+        <a href="/index">INÍCIO</a> |
+        <a href="/login">LOGIN</a> |
+        <a href="/registro">CADASTRO</a> |
+        <a href="/perfil">PERFIL</a> |
+        <a href="/comentarios">COMENTÁRIOS</a> |
+        <a href="/download">DOWNLOADS</a> |
+        <a href="/modo">MODO</a> |
+        <a href="/forense">FORENSE</a> |
+        <a href="/reset">RESTAURAR</a> |
+        <a href="/logout">SAIR</a>
+
+    </div>
+
+
+    <div class="card">
+
+        <p>
+            <strong>Modo operacional atual:</strong>
+            {{ modo_atual_global }}
+        </p>
+
+    </div>
+
+
+    <div class="container">
+
+
+        {% if restaurado %}
+
+
+            <div class="card">
+
+                <h2>
+                    Ambiente restaurado com sucesso
+                </h2>
+
+                <p>
+                    O CCTE foi restaurado para seu estado
+                    inicial de funcionamento.
+                </p>
+
+                <p>
+                    Os dados produzidos durante a sessão anterior
+                    foram removidos e os estados temporários
+                    mantidos pela aplicação foram reinicializados.
+                </p>
+
+                <p>
+                    <strong>Modo operacional:</strong>
+                    {{ modo_atual }}
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h2>
+                    Resultado da restauração
+                </h2>
+
+                <table class="log-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Componente
+                            </th>
+
+                            <th>
+                                Resultado
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                Banco de dados
+                            </td>
+
+                            <td>
+                                Recriado com o estado inicial
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                Banco anterior
+                            </td>
+
+                            <td>
+
+                                {% if banco_apagado %}
+
+                                    Removido
+
+                                {% else %}
+
+                                    Não existia
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                Audit Log anterior
+                            </td>
+
+                            <td>
+
+                                {% if audit_apagado %}
+
+                                    Removido
+
+                                {% else %}
+
+                                    Não existia
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                Security Log anterior
+                            </td>
+
+                            <td>
+
+                                {% if security_apagado %}
+
+                                    Removido
+
+                                {% else %}
+
+                                    Não existia
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                Tentativas de login em memória
+                            </td>
+
+                            <td>
+                                {{ tentativas_removidas }}
+                                removida(s)
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                Bloqueios temporários de IP
+                            </td>
+
+                            <td>
+                                {{ bloqueios_removidos }}
+                                removido(s)
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                Sessão do usuário
+                            </td>
+
+                            <td>
+                                Encerrada
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                Modo operacional
+                            </td>
+
+                            <td>
+                                {{ modo_atual }}
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <div class="card">
+
+                <h2>
+                    Nova sessão de laboratório
+                </h2>
+
+                <p>
+                    A restauração encerra o estado experimental
+                    anterior e prepara o CCTE para uma nova
+                    sequência de exercícios.
+                </p>
+
+                <p>
+                    Um novo registro
+                    <strong>AMBIENTE_RESTAURADO</strong>
+                    foi iniciado no Audit Log para identificar
+                    o começo desta nova sessão.
+                </p>
+
+                <a
+                    href="/index"
+                    class="btn"
+                >
+                    Voltar ao CCTE
+                </a>
+
+            </div>
+
+
+        {% else %}
+
+
+            <div class="card">
+
+                <h2>
+                    Sobre a restauração
+                </h2>
+
+                <p>
+                    Esta funcionalidade retorna o laboratório
+                    ao estado inicial definido pelo CCTE,
+                    permitindo que novas atividades práticas
+                    sejam realizadas em um ambiente limpo.
+                </p>
+
+                <p>
+                    A operação não reinicia o servidor Flask.
+                    Ela restaura os dados persistentes e os
+                    estados temporários mantidos pela aplicação.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h2>
+                    Atenção: operação destrutiva
+                </h2>
+
+                <p>
+                    A restauração remove permanentemente
+                    os dados produzidos durante a sessão atual.
+                </p>
+
+                <p>
+                    Serão removidos ou reinicializados:
+                </p>
+
+                <ul>
+
+                    <li>
+                        usuários cadastrados durante os testes;
+                    </li>
+
+                    <li>
+                        comentários armazenados;
+                    </li>
+
+                    <li>
+                        registros anteriores do Audit Log;
+                    </li>
+
+                    <li>
+                        registros anteriores do Security Log;
+                    </li>
+
+                    <li>
+                        tentativas de login mantidas em memória;
+                    </li>
+
+                    <li>
+                        bloqueios temporários de IP;
+                    </li>
+
+                    <li>
+                        sessão atual do usuário;
+                    </li>
+
+                    <li>
+                        estado do modo operacional.
+                    </li>
+
+                </ul>
+
+                <p>
+                    O banco de dados será recriado com os
+                    usuários padrão do laboratório.
+                </p>
+
+                <p>
+                    O modo operacional retornará para
+                    <strong>EDUCACIONAL</strong>.
+                </p>
+
+                <p>
+                    <strong>
+                        Esta operação não pode ser desfeita.
+                    </strong>
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h2>
+                    Confirmação
+                </h2>
+
+                <p>
+                    Para evitar uma restauração acidental,
+                    confirme explicitamente a operação.
+                </p>
+
+
+                {% if erro %}
+
+                    <p>
+                        <strong>
+                            {{ erro }}
+                        </strong>
+                    </p>
+
+                {% endif %}
+
+
+                <form
+                    method="POST"
+                    action="/reset"
+                >
+
+                    <label for="confirmacao">
+
+                        Digite
+                        <strong>RESETAR</strong>
+                        para confirmar:
+
+                    </label>
+
+                    <br><br>
+
+
+                    <input
+                        type="text"
+                        id="confirmacao"
+                        name="confirmacao"
+                        autocomplete="off"
+                        required
+                    >
+
+
+                    <br><br>
+
+
+                    <button
+                        type="submit"
+                        class="btn"
+                    >
+                        Restaurar ambiente
+                    </button>
+
+                </form>
+
+
+                <br>
+
+
+                <a
+                    href="/index"
+                    class="btn"
+                >
+                    Cancelar
+                </a>
+
+            </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+    <footer class="footer">
+
+        <small>
+            Trabalho de Conclusão de Curso —
+            Análise e Desenvolvimento de Sistemas
+        </small>
+
+        <small>
+            Professora Orientadora: Josiane Fontoura
+            &nbsp;|&nbsp;
+            Coordenador do Curso: Marcelo Rosa
+        </small>
+
+        <small>
+            2026 • CCTE • Ambiente educacional —
+            Vinícius Dorneles Ferreira
+        </small>
+
+    </footer>
+
+
+</body>
+
+</html>

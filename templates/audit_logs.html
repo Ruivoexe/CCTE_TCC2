@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        CCTE - Audit Log
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="lab-banner">
+
+        <strong>CCTE — ANÁLISE FORENSE</strong>
+
+        —
+        Visualização dos eventos operacionais
+        registrados pelo ambiente.
+
+    </div>
+
+
+    <h1>
+        CCTE - Audit Log
+    </h1>
+
+
+    <div class="nav">
+
+        <a href="/index">INÍCIO</a> |
+        <a href="/login">LOGIN</a> |
+        <a href="/registro">CADASTRO</a> |
+        <a href="/perfil">PERFIL</a> |
+        <a href="/comentarios">COMENTÁRIOS</a> |
+        <a href="/download">DOWNLOADS</a> |
+        <a href="/modo">MODO</a> |
+        <a href="/forense">FORENSE</a> |
+        <a href="/reset">RESTAURAR</a> |
+        <a href="/logout">SAIR</a>
+
+    </div>
+
+
+    <div class="card">
+
+        <p>
+            <strong>Modo operacional atual:</strong>
+            {{ modo_atual_global }}
+        </p>
+
+    </div>
+
+
+    <main class="container">
+
+
+        <div class="card">
+
+            <h2>
+                Eventos de auditoria
+            </h2>
+
+            <p>
+                O Audit Log apresenta os eventos operacionais
+                produzidos durante a utilização do CCTE.
+            </p>
+
+            <p>
+                Esses registros permitem acompanhar ações
+                realizadas pelos usuários e pelo próprio sistema,
+                incluindo autenticação, navegação, mudanças
+                de modo, respostas defensivas e restauração
+                do ambiente.
+            </p>
+
+            <p>
+                <strong>Total de eventos exibidos:</strong>
+                {{ eventos | length }}
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Navegação forense
+            </h2>
+
+            <p>
+
+                <a
+                    href="/forense"
+                    class="btn"
+                >
+                    Painel Forense
+                </a>
+
+            </p>
+
+
+            <p>
+
+                <a
+                    href="/forense/audit"
+                    class="btn"
+                >
+                    Audit Log
+                </a>
+
+            </p>
+
+
+            <p>
+
+                <a
+                    href="/forense/security"
+                    class="btn"
+                >
+                    Security Log
+                </a>
+
+            </p>
+
+
+            <p>
+
+                <a
+                    href="/forense/relatorio"
+                    class="btn"
+                >
+                    Relatório Forense
+                </a>
+
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Filtrar eventos
+            </h2>
+
+            <p>
+                Os filtros podem ser utilizados individualmente
+                ou combinados para restringir os registros
+                apresentados na tabela.
+            </p>
+
+
+            <form
+                method="GET"
+                action="/forense/audit"
+            >
+
+
+                <div>
+
+                    <label for="tipo">
+
+                        <strong>
+                            Tipo de evento:
+                        </strong>
+
+                    </label>
+
+                    <br>
+
+                    <input
+                        type="text"
+                        id="tipo"
+                        name="tipo"
+                        placeholder="Ex.: LOGIN_SUCESSO, PAGINA_VISUALIZADA"
+                        value="{{ tipo_filtro }}"
+                    >
+
+                </div>
+
+
+                <br>
+
+
+                <div>
+
+                    <label for="ip">
+
+                        <strong>
+                            Endereço IP:
+                        </strong>
+
+                    </label>
+
+                    <br>
+
+                    <input
+                        type="text"
+                        id="ip"
+                        name="ip"
+                        placeholder="Ex.: 127.0.0.1"
+                        value="{{ ip_filtro }}"
+                    >
+
+                </div>
+
+
+                <br>
+
+
+                <div>
+
+                    <label for="detalhes">
+
+                        <strong>
+                            Detalhes:
+                        </strong>
+
+                    </label>
+
+                    <br>
+
+                    <input
+                        type="text"
+                        id="detalhes"
+                        name="detalhes"
+                        placeholder="Ex.: /perfil, username=admin, modo=EDUCACIONAL"
+                        value="{{ detalhes_filtro }}"
+                    >
+
+                </div>
+
+
+                <br>
+
+
+                <button
+                    type="submit"
+                    class="btn"
+                >
+                    Filtrar
+                </button>
+
+
+                <a
+                    href="/forense/audit"
+                    class="btn"
+                >
+                    Limpar filtros
+                </a>
+
+            </form>
+
+
+            {% if tipo_filtro or ip_filtro or detalhes_filtro %}
+
+                <hr>
+
+                <h3>
+                    Filtros ativos
+                </h3>
+
+
+                {% if tipo_filtro %}
+
+                    <p>
+                        <strong>Tipo:</strong>
+                        {{ tipo_filtro }}
+                    </p>
+
+                {% endif %}
+
+
+                {% if ip_filtro %}
+
+                    <p>
+                        <strong>IP:</strong>
+                        {{ ip_filtro }}
+                    </p>
+
+                {% endif %}
+
+
+                {% if detalhes_filtro %}
+
+                    <p>
+                        <strong>Detalhes:</strong>
+                        {{ detalhes_filtro }}
+                    </p>
+
+                {% endif %}
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Registros encontrados
+            </h2>
+
+
+            {% if eventos %}
+
+
+                <table class="log-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Data / Hora
+                            </th>
+
+                            <th>
+                                IP
+                            </th>
+
+                            <th>
+                                Evento
+                            </th>
+
+                            <th>
+                                Detalhes
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for evento in eventos %}
+
+                            <tr>
+
+                                <td>
+                                    {{ evento.timestamp }}
+                                </td>
+
+
+                                <td>
+                                    {{ evento.ip }}
+                                </td>
+
+
+                                <td>
+
+                                    <strong>
+                                        {{ evento.tipo }}
+                                    </strong>
+
+                                </td>
+
+
+                                <td>
+
+                                    {% if evento.detalhes %}
+
+                                        {{ evento.detalhes }}
+
+                                    {% else %}
+
+                                        -
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+
+            {% else %}
+
+
+                <h3>
+                    Nenhum evento encontrado
+                </h3>
+
+
+                {% if tipo_filtro or ip_filtro or detalhes_filtro %}
+
+                    <p>
+                        Não foram encontrados eventos de auditoria
+                        correspondentes aos filtros informados.
+                    </p>
+
+
+                    {% if tipo_filtro %}
+
+                        <p>
+                            <strong>Tipo pesquisado:</strong>
+                            {{ tipo_filtro }}
+                        </p>
+
+                    {% endif %}
+
+
+                    {% if ip_filtro %}
+
+                        <p>
+                            <strong>IP pesquisado:</strong>
+                            {{ ip_filtro }}
+                        </p>
+
+                    {% endif %}
+
+
+                    {% if detalhes_filtro %}
+
+                        <p>
+                            <strong>Detalhes pesquisados:</strong>
+                            {{ detalhes_filtro }}
+                        </p>
+
+                    {% endif %}
+
+
+                    <a
+                        href="/forense/audit"
+                        class="btn"
+                    >
+                        Mostrar todos os eventos
+                    </a>
+
+
+                {% else %}
+
+                    <p>
+                        Nenhum evento de auditoria foi registrado
+                        nesta sessão do laboratório.
+                    </p>
+
+                {% endif %}
+
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Sobre o Audit Log
+            </h2>
+
+            <p>
+                O Audit Log registra informações relacionadas
+                ao funcionamento da aplicação e às ações
+                realizadas durante a utilização do CCTE.
+            </p>
+
+            <p>
+                Entre os eventos registrados podem aparecer:
+            </p>
+
+            <ul>
+
+                <li>
+                    visualização de páginas;
+                </li>
+
+                <li>
+                    autenticações bem-sucedidas ou malsucedidas;
+                </li>
+
+                <li>
+                    criação de usuários;
+                </li>
+
+                <li>
+                    encerramento de sessões;
+                </li>
+
+                <li>
+                    publicação de comentários;
+                </li>
+
+                <li>
+                    solicitações e entrega de arquivos;
+                </li>
+
+                <li>
+                    alterações do modo operacional;
+                </li>
+
+                <li>
+                    ações executadas pela Defesa Ativa;
+                </li>
+
+                <li>
+                    restauração do ambiente de laboratório.
+                </li>
+
+            </ul>
+
+
+            <h3>
+                Exemplos de eventos
+            </h3>
+
+            <p>
+                Alguns eventos que podem ser pesquisados:
+            </p>
+
+            <p>
+                <code>LOGIN_SUCESSO</code>
+            </p>
+
+            <p>
+                <code>LOGIN_FALHA</code>
+            </p>
+
+            <p>
+                <code>PAGINA_VISUALIZADA</code>
+            </p>
+
+            <p>
+                <code>MODO_ALTERADO</code>
+            </p>
+
+            <p>
+                <code>DEFESA_BLOQUEIO_APLICADO</code>
+            </p>
+
+            <p>
+                <code>DEFESA_LIMITE_REQUISICOES_ATIVADO</code>
+            </p>
+
+            <p>
+                <code>AMBIENTE_RESTAURADO</code>
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Uso dos filtros
+            </h2>
+
+            <p>
+                O filtro por <strong>tipo</strong>
+                permite localizar uma categoria específica
+                de evento.
+            </p>
+
+            <p>
+                O filtro por <strong>IP</strong>
+                permite observar atividades associadas
+                a determinado endereço.
+            </p>
+
+            <p>
+                O filtro por <strong>detalhes</strong>
+                permite pesquisar informações adicionais
+                registradas junto ao evento.
+            </p>
+
+            <p>
+                Exemplos de valores pesquisáveis incluem:
+            </p>
+
+            <p>
+                <code>/perfil</code>
+            </p>
+
+            <p>
+                <code>username=admin</code>
+            </p>
+
+            <p>
+                <code>session_id=5</code>
+            </p>
+
+            <p>
+                <code>modo=EDUCACIONAL</code>
+            </p>
+
+        </div>
+
+
+    </main>
+
+
+    <footer class="footer">
+
+        <small>
+            Trabalho de Conclusão de Curso —
+            Análise e Desenvolvimento de Sistemas
+        </small>
+
+        <small>
+            Professora Orientadora: Josiane Fontoura
+            &nbsp;|&nbsp;
+            Coordenador do Curso: Marcelo Rosa
+        </small>
+
+        <small>
+            2026 • CCTE • Ambiente educacional —
+            Vinícius Dorneles Ferreira
+        </small>
+
+    </footer>
+
+
+</body>
+
+</html>

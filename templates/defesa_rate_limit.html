@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        CCTE - Limite de Requisições
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="lab-banner">
+
+        <strong>CCTE — DEFESA ATIVA</strong>
+
+        —
+        Mecanismo automático de limitação
+        de requisições acionado.
+
+    </div>
+
+
+    <h1>
+        CCTE - Defesa Ativa
+    </h1>
+
+
+    <div class="nav">
+
+        <a href="/index">INÍCIO</a> |
+        <a href="/login">LOGIN</a> |
+        <a href="/registro">CADASTRO</a> |
+        <a href="/perfil">PERFIL</a> |
+        <a href="/comentarios">COMENTÁRIOS</a> |
+        <a href="/download">DOWNLOADS</a> |
+        <a href="/modo">MODO</a> |
+        <a href="/forense">FORENSE</a> |
+        <a href="/reset">RESTAURAR</a> |
+        <a href="/logout">SAIR</a>
+
+    </div>
+
+
+    <div class="card">
+
+        <p>
+            <strong>Modo operacional atual:</strong>
+            {{ modo_atual_global }}
+        </p>
+
+    </div>
+
+
+    <main class="container">
+
+
+        <div class="card">
+
+            <h2>
+                Limite de requisições atingido
+            </h2>
+
+            <p>
+                O módulo de monitoramento identificou
+                uma frequência elevada de tentativas
+                consecutivas de autenticação.
+            </p>
+
+            <p>
+                Esse comportamento foi classificado como
+                uma possível tentativa de
+                <strong>Brute Force</strong>.
+            </p>
+
+            <p>
+                Como o CCTE está operando em
+                <strong>{{ modo_atual_global }}</strong>,
+                novas requisições de autenticação provenientes
+                do mesmo cliente foram temporariamente limitadas.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Informações da resposta defensiva
+            </h2>
+
+            <p>
+                <strong>Ataque detectado:</strong>
+                Brute Force
+            </p>
+
+            <p>
+                <strong>Ação aplicada:</strong>
+                Limitação temporária de requisições
+                (Rate Limiting)
+            </p>
+
+            <p>
+                <strong>Endpoint protegido:</strong>
+                <code>/login</code>
+            </p>
+
+            <p>
+                <strong>Tempo restante aproximado:</strong>
+                {{ tempo_restante }} segundo(s)
+            </p>
+
+            <p>
+                <strong>Status HTTP:</strong>
+                429 - Too Many Requests
+            </p>
+
+            <p>
+                <strong>Resultado:</strong>
+                novas tentativas de autenticação permanecem
+                temporariamente bloqueadas até o encerramento
+                do período de restrição.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Interpretação educacional
+            </h2>
+
+            <p>
+                Ataques de <strong>Brute Force</strong>
+                utilizam múltiplas tentativas de autenticação
+                para tentar descobrir credenciais válidas.
+            </p>
+
+            <p>
+                O mecanismo de limite de requisições reduz
+                a quantidade de tentativas que um mesmo cliente
+                pode realizar em determinado intervalo de tempo.
+            </p>
+
+            <p>
+                Essa medida não remove a funcionalidade de login.
+                Ela introduz uma restrição temporária quando
+                o comportamento observado ultrapassa o limite
+                definido pelo mecanismo defensivo.
+            </p>
+
+            <p>
+                Após o encerramento do período de bloqueio,
+                novas tentativas de autenticação poderão ser
+                realizadas normalmente.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Comparação dos modos
+            </h2>
+
+            <p>
+                No <strong>Modo Educacional</strong>,
+                múltiplas tentativas consecutivas podem ser
+                realizadas para demonstrar o comportamento
+                associado a Brute Force.
+            </p>
+
+            <p>
+                As tentativas continuam sendo monitoradas
+                e registradas, mas nenhuma limitação automática
+                é aplicada.
+            </p>
+
+            <p>
+                Na <strong>Defesa Ativa</strong>,
+                quando o comportamento ultrapassa o limite
+                estabelecido, o endereço responsável recebe
+                uma restrição temporária e novas requisições
+                ao login recebem uma resposta
+                <strong>HTTP 429</strong>.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Próximas ações
+            </h2>
+
+            <p>
+                Aguarde o encerramento do período de restrição
+                antes de realizar uma nova tentativa de login.
+            </p>
+
+            <p>
+                Para comparar o mesmo comportamento sem
+                mitigação automática, altere o CCTE para
+                o <strong>Modo Educacional</strong>.
+            </p>
+
+            <p>
+                Os eventos relacionados à detecção e à resposta
+                defensiva podem ser analisados no módulo forense.
+            </p>
+
+
+            <p>
+
+                <a
+                    href="/login"
+                    class="btn"
+                >
+                    Retornar ao login
+                </a>
+
+            </p>
+
+
+            <p>
+
+                <a
+                    href="/modo"
+                    class="btn"
+                >
+                    Consultar modos operacionais
+                </a>
+
+            </p>
+
+
+            <p>
+
+                <a
+                    href="/forense"
+                    class="btn"
+                >
+                    Abrir Painel Forense
+                </a>
+
+            </p>
+
+
+            <p>
+
+                <a
+                    href="/forense/security"
+                    class="btn"
+                >
+                    Consultar Security Log
+                </a>
+
+            </p>
+
+
+            <p>
+
+                <a
+                    href="/forense/audit"
+                    class="btn"
+                >
+                    Consultar Audit Log
+                </a>
+
+            </p>
+
+        </div>
+
+
+    </main>
+
+
+    <footer class="footer">
+
+        <small>
+            Trabalho de Conclusão de Curso —
+            Análise e Desenvolvimento de Sistemas
+        </small>
+
+        <small>
+            Professora Orientadora: Josiane Fontoura
+            &nbsp;|&nbsp;
+            Coordenador do Curso: Marcelo Rosa
+        </small>
+
+        <small>
+            2026 • CCTE • Ambiente educacional —
+            Vinícius Dorneles Ferreira
+        </small>
+
+    </footer>
+
+
+</body>
+
+</html>

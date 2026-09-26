@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        CCTE - Painel Forense
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="lab-banner">
+
+        <strong>CCTE — ANÁLISE FORENSE</strong>
+
+        —
+        Área destinada à análise dos eventos
+        registrados durante os exercícios.
+
+    </div>
+
+
+    <h1>
+        CCTE - Painel Forense
+    </h1>
+
+
+    <div class="nav">
+
+        <a href="/index">INÍCIO</a> |
+        <a href="/login">LOGIN</a> |
+        <a href="/registro">CADASTRO</a> |
+        <a href="/perfil">PERFIL</a> |
+        <a href="/comentarios">COMENTÁRIOS</a> |
+        <a href="/download">DOWNLOADS</a> |
+        <a href="/modo">MODO</a> |
+        <a href="/forense">FORENSE</a> |
+        <a href="/reset">RESTAURAR</a> |
+        <a href="/logout">SAIR</a>
+
+    </div>
+
+
+    <div class="card">
+
+        <p>
+            <strong>Modo operacional atual:</strong>
+            {{ modo_atual_global }}
+        </p>
+
+    </div>
+
+
+    <main class="container">
+
+
+        <div class="card">
+
+            <h2>
+                Central de análise
+            </h2>
+
+            <p>
+                O Painel Forense reúne os recursos utilizados
+                para examinar os eventos produzidos durante
+                a utilização do CCTE.
+            </p>
+
+            <p>
+                As informações são obtidas a partir dos
+                registros de auditoria e segurança e são
+                processadas pelo módulo forense para permitir
+                análise cronológica, classificação e
+                consolidação dos resultados.
+            </p>
+
+        </div>
+
+
+        <div class="card-grid">
+
+
+            <div class="card">
+
+                <h2>
+                    Audit Log
+                </h2>
+
+                <p>
+                    Registra eventos operacionais relacionados
+                    ao uso da aplicação e às ações executadas
+                    pelo sistema.
+                </p>
+
+                <p>
+                    Entre os registros estão autenticações,
+                    falhas de login, cadastros, alterações
+                    de modo, respostas defensivas e outras
+                    atividades relevantes.
+                </p>
+
+                <p>
+                    <strong>Eventos registrados:</strong>
+                    {{ total_audit }}
+                </p>
+
+                <a
+                    href="/forense/audit"
+                    class="btn"
+                >
+                    Consultar Audit Log
+                </a>
+
+            </div>
+
+
+            <div class="card">
+
+                <h2>
+                    Security Log
+                </h2>
+
+                <p>
+                    Reúne requisições classificadas pelo
+                    módulo de monitoramento como comportamentos
+                    suspeitos ou tentativas de ataque.
+                </p>
+
+                <p>
+                    Entre as categorias monitoradas estão
+                    <strong>SQL Injection</strong>,
+                    <strong>XSS</strong>,
+                    <strong>IDOR</strong>,
+                    <strong>Path Traversal</strong>,
+                    <strong>File Disclosure</strong>
+                    e <strong>Brute Force</strong>.
+                </p>
+
+                <p>
+                    <strong>Eventos de segurança:</strong>
+                    {{ total_security }}
+                </p>
+
+                <a
+                    href="/forense/security"
+                    class="btn"
+                >
+                    Consultar Security Log
+                </a>
+
+            </div>
+
+
+            <div class="card">
+
+                <h2>
+                    Relatório Forense
+                </h2>
+
+                <p>
+                    Consolida os dados obtidos pelos mecanismos
+                    de auditoria e segurança em uma visão
+                    resumida da atividade observada.
+                </p>
+
+                <p>
+                    O relatório apresenta período analisado,
+                    estatísticas, ataques classificados,
+                    endereços IP, endpoints, ações defensivas
+                    e uma timeline dos eventos relevantes.
+                </p>
+
+                <a
+                    href="/forense/relatorio"
+                    class="btn"
+                >
+                    Abrir Relatório Forense
+                </a>
+
+            </div>
+
+
+            <div class="card">
+
+                <h2>
+                    Resumo do ambiente
+                </h2>
+
+                <p>
+                    <strong>Eventos de auditoria:</strong>
+                    {{ total_audit }}
+                </p>
+
+                <p>
+                    <strong>Eventos de segurança:</strong>
+                    {{ total_security }}
+                </p>
+
+                <p>
+                    <strong>Total de eventos:</strong>
+                    {{ total_eventos }}
+                </p>
+
+                <p>
+                    <strong>Ataques classificados:</strong>
+                    {{ total_ataques }}
+                </p>
+
+
+                <h3>
+                    Ataques por categoria
+                </h3>
+
+
+                {% if ataques %}
+
+                    {% for tipo, quantidade in ataques.items() %}
+
+                        <p>
+                            <strong>{{ tipo }}:</strong>
+                            {{ quantidade }}
+                        </p>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <p>
+                        Nenhum ataque foi classificado
+                        até o momento.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Timeline recente
+            </h2>
+
+            <p>
+                A tabela apresenta os dez eventos mais recentes
+                obtidos dos mecanismos de auditoria e segurança,
+                permitindo observar a sequência temporal das
+                atividades registradas.
+            </p>
+
+
+            {% if ultimos_eventos %}
+
+                <table class="log-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Data / Hora
+                            </th>
+
+                            <th>
+                                Origem
+                            </th>
+
+                            <th>
+                                Tipo
+                            </th>
+
+                            <th>
+                                IP
+                            </th>
+
+                            <th>
+                                Detalhes
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for evento in ultimos_eventos %}
+
+                            <tr>
+
+                                <td>
+                                    {{ evento.timestamp }}
+                                </td>
+
+
+                                <td>
+
+                                    {% if evento.origem == "security" %}
+
+                                        Segurança
+
+                                    {% else %}
+
+                                        Auditoria
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <td>
+
+                                    <strong>
+                                        {{ evento.tipo }}
+                                    </strong>
+
+                                </td>
+
+
+                                <td>
+                                    {{ evento.ip }}
+                                </td>
+
+
+                                <td>
+
+                                    {% if evento.origem == "security" %}
+
+
+                                        <strong>
+                                            Endpoint:
+                                        </strong>
+
+                                        {{ evento.endpoint }}
+
+
+                                        <br>
+
+
+                                        <strong>
+                                            Payload:
+                                        </strong>
+
+                                        {% if evento.payload %}
+
+                                            {{ evento.payload }}
+
+                                        {% else %}
+
+                                            -
+
+                                        {% endif %}
+
+
+                                        {% if evento.args %}
+
+                                            <br>
+
+                                            <strong>
+                                                Argumentos:
+                                            </strong>
+
+                                            {{ evento.args }}
+
+                                        {% endif %}
+
+
+                                        <br>
+
+
+                                        <strong>
+                                            Usuário da sessão:
+                                        </strong>
+
+
+                                        {% if evento.session_user
+                                              and evento.session_user != "None" %}
+
+                                            {{ evento.session_user }}
+
+                                        {% else %}
+
+                                            Não autenticado
+
+                                        {% endif %}
+
+
+                                    {% else %}
+
+
+                                        {% if evento.detalhes %}
+
+                                            {{ evento.detalhes }}
+
+                                        {% else %}
+
+                                            -
+
+                                        {% endif %}
+
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+
+            {% else %}
+
+                <p>
+                    Nenhum evento está disponível para
+                    construção da timeline.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Interpretação dos registros
+            </h2>
+
+            <p>
+                Os diferentes registros do CCTE possuem
+                responsabilidades complementares.
+            </p>
+
+
+            <p>
+                <strong>Audit Log:</strong>
+                registra o que ocorreu na aplicação e
+                determinadas ações executadas pelo sistema,
+                incluindo respostas da Defesa Ativa.
+            </p>
+
+
+            <p>
+                <strong>Security Log:</strong>
+                registra o que foi identificado pelo
+                mecanismo de monitoramento como tentativa
+                de ataque ou comportamento suspeito.
+            </p>
+
+
+            <p>
+                <strong>Relatório Forense:</strong>
+                correlaciona essas informações para apresentar
+                estatísticas e uma visão consolidada dos
+                acontecimentos observados.
+            </p>
+
+
+            <p>
+                Essa separação permite distinguir
+                <strong>atividade operacional</strong>,
+                <strong>detecção de segurança</strong>
+                e <strong>resposta defensiva</strong>.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Acessos do módulo forense
+            </h2>
+
+
+            <p>
+
+                <a
+                    href="/forense/audit"
+                    class="btn"
+                >
+                    Consultar Audit Log
+                </a>
+
+            </p>
+
+
+            <p>
+
+                <a
+                    href="/forense/security"
+                    class="btn"
+                >
+                    Consultar Security Log
+                </a>
+
+            </p>
+
+
+            <p>
+
+                <a
+                    href="/forense/relatorio"
+                    class="btn"
+                >
+                    Consultar Relatório Forense
+                </a>
+
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Preservação dos registros
+            </h2>
+
+            <p>
+                Os dados apresentados neste módulo representam
+                evidências produzidas durante a sessão atual
+                do laboratório.
+            </p>
+
+            <p>
+                A utilização da função
+                <strong>Restaurar ambiente</strong>
+                remove os registros anteriores de auditoria
+                e segurança e inicia uma nova sessão
+                experimental.
+            </p>
+
+            <p>
+                Caso seja necessário preservar os resultados
+                de uma atividade, consulte ou exporte o
+                Relatório Forense antes de restaurar
+                o ambiente.
+            </p>
+
+        </div>
+
+
+    </main>
+
+
+    <footer class="footer">
+
+        <small>
+            Trabalho de Conclusão de Curso —
+            Análise e Desenvolvimento de Sistemas
+        </small>
+
+        <small>
+            Professora Orientadora: Josiane Fontoura
+            &nbsp;|&nbsp;
+            Coordenador do Curso: Marcelo Rosa
+        </small>
+
+        <small>
+            2026 • CCTE • Ambiente educacional —
+            Vinícius Dorneles Ferreira
+        </small>
+
+    </footer>
+
+
+</body>
+
+</html>

@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>CCTE - Modos Operacionais</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="lab-banner">
+
+        <strong>CCTE — MODOS OPERACIONAIS</strong>
+
+        —
+        Compare o comportamento do ambiente
+        durante os exercícios de cibersegurança.
+
+    </div>
+
+
+    <h1>
+        CCTE - Modos Operacionais
+    </h1>
+
+
+    <div class="nav">
+
+        <a href="/index">INÍCIO</a> |
+        <a href="/login">LOGIN</a> |
+        <a href="/registro">CADASTRO</a> |
+        <a href="/perfil">PERFIL</a> |
+        <a href="/comentarios">COMENTÁRIOS</a> |
+        <a href="/download">DOWNLOADS</a> |
+        <a href="/modo">MODO</a> |
+        <a href="/forense">FORENSE</a> |
+        <a href="/reset">RESTAURAR</a> |
+        <a href="/logout">SAIR</a>
+
+    </div>
+
+
+    <div class="container">
+
+
+        <div class="card">
+
+            <h2>
+                Controle do ambiente
+            </h2>
+
+            <p>
+                O CCTE permite alternar entre dois modos
+                operacionais para possibilitar a comparação
+                do comportamento do sistema diante das mesmas
+                ações e tentativas de ataque.
+            </p>
+
+            <p>
+                A alteração do modo é temporária e permanece
+                válida enquanto a aplicação estiver em execução.
+            </p>
+
+            <p>
+                Quando o processo Flask é reiniciado ou quando
+                o ambiente é restaurado, o CCTE retorna ao
+                <strong>Modo Educacional</strong>.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Modo operacional atual
+            </h2>
+
+
+            {% if modo_atual == modo_educacional %}
+
+                <h3>
+                    EDUCACIONAL
+                </h3>
+
+                <p>
+                    <strong>Estado:</strong>
+                    monitoramento e detecção ativos,
+                    sem mitigação automática.
+                </p>
+
+
+            {% elif modo_atual == modo_defesa_ativa %}
+
+                <h3>
+                    DEFESA ATIVA
+                </h3>
+
+                <p>
+                    <strong>Estado:</strong>
+                    monitoramento, detecção e mecanismos
+                    automáticos de resposta defensiva habilitados.
+                </p>
+
+
+            {% else %}
+
+                <h3>
+                    DESCONHECIDO
+                </h3>
+
+                <p>
+                    O estado atual do modo operacional
+                    não pôde ser identificado.
+                </p>
+
+            {% endif %}
+
+
+            <p>
+                {{ descricao_atual }}
+            </p>
+
+        </div>
+
+
+        <div class="card-grid">
+
+
+            <div class="card">
+
+                <h2>
+                    Modo Educacional
+                </h2>
+
+                <p>
+                    {{ descricao_educacional }}
+                </p>
+
+
+                <h3>
+                    Comportamento
+                </h3>
+
+                <ul>
+
+                    <li>
+                        as vulnerabilidades intencionais
+                        permanecem exploráveis;
+                    </li>
+
+                    <li>
+                        o monitoramento permanece ativo;
+                    </li>
+
+                    <li>
+                        as tentativas de ataque continuam
+                        sendo detectadas;
+                    </li>
+
+                    <li>
+                        os eventos continuam sendo registrados;
+                    </li>
+
+                    <li>
+                        nenhuma resposta automática de
+                        mitigação é aplicada.
+                    </li>
+
+                </ul>
+
+
+                {% if modo_atual == modo_educacional %}
+
+                    <p>
+                        <strong>
+                            MODO ATUALMENTE ATIVO
+                        </strong>
+                    </p>
+
+                {% else %}
+
+                    <form
+                        method="POST"
+                        action="/modo"
+                    >
+
+                        <input
+                            type="hidden"
+                            name="modo"
+                            value="EDUCACIONAL"
+                        >
+
+                        <button
+                            type="submit"
+                            class="btn"
+                        >
+                            Ativar Modo Educacional
+                        </button>
+
+                    </form>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="card">
+
+                <h2>
+                    Defesa Ativa
+                </h2>
+
+                <p>
+                    {{ descricao_defesa }}
+                </p>
+
+
+                <h3>
+                    Comportamento
+                </h3>
+
+                <ul>
+
+                    <li>
+                        o monitoramento permanece ativo;
+                    </li>
+
+                    <li>
+                        as tentativas de ataque continuam
+                        sendo detectadas;
+                    </li>
+
+                    <li>
+                        os eventos continuam sendo registrados;
+                    </li>
+
+                    <li>
+                        mecanismos automáticos de resposta
+                        defensiva são aplicados quando
+                        as regras correspondentes são acionadas;
+                    </li>
+
+                    <li>
+                        o comportamento defensivo pode ser
+                        comparado diretamente com o
+                        Modo Educacional.
+                    </li>
+
+                </ul>
+
+
+                {% if modo_atual == modo_defesa_ativa %}
+
+                    <p>
+                        <strong>
+                            MODO ATUALMENTE ATIVO
+                        </strong>
+                    </p>
+
+                {% else %}
+
+                    <form
+                        method="POST"
+                        action="/modo"
+                    >
+
+                        <input
+                            type="hidden"
+                            name="modo"
+                            value="DEFESA_ATIVA"
+                        >
+
+                        <button
+                            type="submit"
+                            class="btn"
+                        >
+                            Ativar Defesa Ativa
+                        </button>
+
+                    </form>
+
+                {% endif %}
+
+            </div>
+
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Comparação dos modos
+            </h2>
+
+
+            <table class="log-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Comportamento
+                        </th>
+
+                        <th>
+                            Educacional
+                        </th>
+
+                        <th>
+                            Defesa Ativa
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    <tr>
+
+                        <td>
+                            Vulnerabilidades intencionais
+                        </td>
+
+                        <td>
+                            Presentes
+                        </td>
+
+                        <td>
+                            Presentes
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            Exploração sem mitigação
+                        </td>
+
+                        <td>
+                            Permitida
+                        </td>
+
+                        <td>
+                            Sujeita à resposta defensiva
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            Monitoramento
+                        </td>
+
+                        <td>
+                            Ativo
+                        </td>
+
+                        <td>
+                            Ativo
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            Detecção
+                        </td>
+
+                        <td>
+                            Ativa
+                        </td>
+
+                        <td>
+                            Ativa
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            Audit Log
+                        </td>
+
+                        <td>
+                            Ativo
+                        </td>
+
+                        <td>
+                            Ativo
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            Security Log
+                        </td>
+
+                        <td>
+                            Ativo
+                        </td>
+
+                        <td>
+                            Ativo
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            Análise forense
+                        </td>
+
+                        <td>
+                            Disponível
+                        </td>
+
+                        <td>
+                            Disponível
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            Mitigação automática
+                        </td>
+
+                        <td>
+                            Desativada
+                        </td>
+
+                        <td>
+                            Ativada
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Observação educacional
+            </h2>
+
+            <p>
+                A alternância entre os modos faz parte
+                da experiência prática proposta pelo CCTE.
+            </p>
+
+            <p>
+                Uma mesma ação pode ser executada inicialmente
+                no Modo Educacional e posteriormente repetida
+                com a Defesa Ativa habilitada. Dessa forma,
+                é possível observar diferenças entre exploração,
+                detecção, registro e resposta defensiva.
+            </p>
+
+            <p>
+                Os dois modos utilizam o mesmo ambiente
+                de laboratório. A principal diferença está
+                na aplicação ou não de mecanismos automáticos
+                de mitigação.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Análise dos resultados
+            </h2>
+
+            <p>
+                Após a realização dos testes, os eventos
+                registrados podem ser analisados por meio
+                do módulo forense do CCTE.
+            </p>
+
+
+            <p>
+                <a href="/forense">
+                    Abrir Painel Forense
+                </a>
+            </p>
+
+
+            <p>
+                <a href="/forense/audit">
+                    Consultar Audit Log
+                </a>
+            </p>
+
+
+            <p>
+                <a href="/forense/security">
+                    Consultar Security Log
+                </a>
+            </p>
+
+
+            <p>
+                <a href="/forense/relatorio">
+                    Abrir Relatório Forense
+                </a>
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    <footer class="footer">
+
+        <small>
+            Trabalho de Conclusão de Curso —
+            Análise e Desenvolvimento de Sistemas
+        </small>
+
+        <small>
+            Professora Orientadora: Josiane Fontoura
+            &nbsp;|&nbsp;
+            Coordenador do Curso: Marcelo Rosa
+        </small>
+
+        <small>
+            2026 • CCTE • Ambiente educacional —
+            Vinícius Dorneles Ferreira
+        </small>
+
+    </footer>
+
+
+</body>
+
+</html>

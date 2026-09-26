@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        CCTE - Comentários
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="lab-banner">
+
+        <strong>ZONA DE TESTE VULNERÁVEL</strong>
+
+        —
+        Ambiente propositalmente vulnerável para fins
+        educacionais e experimentação controlada.
+
+    </div>
+
+
+    <h1>
+        CCTE - Mural de Comentários
+    </h1>
+
+
+    <div class="nav">
+
+        <a href="/index">INÍCIO</a> |
+        <a href="/login">LOGIN</a> |
+        <a href="/registro">CADASTRO</a> |
+        <a href="/perfil">PERFIL</a> |
+        <a href="/comentarios">COMENTÁRIOS</a> |
+        <a href="/download">DOWNLOADS</a> |
+        <a href="/modo">MODO</a> |
+        <a href="/forense">FORENSE</a> |
+        <a href="/reset">RESTAURAR</a> |
+        <a href="/logout">SAIR</a>
+
+    </div>
+
+
+    <div class="card">
+
+        <p>
+            <strong>Modo operacional atual:</strong>
+            {{ modo_atual_global }}
+        </p>
+
+    </div>
+
+
+    <div class="container">
+
+
+        <div class="card">
+
+            <h2>
+                Publicar comentário
+            </h2>
+
+            <p>
+                Utilize o formulário para adicionar uma
+                mensagem ao mural do laboratório.
+            </p>
+
+            <p>
+                Esta área contém uma vulnerabilidade
+                proposital de
+                <strong>Stored XSS</strong>
+                (Stored Cross-Site Scripting).
+            </p>
+
+
+            <form
+                method="POST"
+                action="/comentarios"
+            >
+
+                <label for="user">
+                    Nome
+                </label>
+
+                <br>
+
+                <input
+                    type="text"
+                    id="user"
+                    name="user"
+                    placeholder="Seu nome"
+                >
+
+
+                <br><br>
+
+
+                <label for="content">
+                    Comentário
+                </label>
+
+                <br>
+
+                <textarea
+                    id="content"
+                    name="content"
+                    rows="5"
+                    placeholder="Escreva seu comentário"
+                ></textarea>
+
+
+                <br><br>
+
+
+                <button
+                    type="submit"
+                    class="btn"
+                >
+                    Publicar comentário
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Comentários publicados
+            </h2>
+
+
+            <div class="comentarios-lista">
+
+                {% if dados %}
+
+                    {% for c in dados %}
+
+                        <div class="card">
+
+                            <p>
+                                <strong>
+                                    {{ c[0] }}
+                                </strong>
+                            </p>
+
+                            <p>
+                                {{ c[1] | safe }}
+                            </p>
+
+                        </div>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <p>
+                        Nenhum comentário foi publicado
+                        nesta sessão do laboratório.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Comportamento educacional
+            </h2>
+
+            <p>
+                No <strong>Modo Educacional</strong>,
+                conteúdos enviados ao mural são armazenados
+                e posteriormente exibidos pela aplicação
+                sem neutralização do conteúdo HTML ou
+                JavaScript.
+            </p>
+
+            <p>
+                Dessa forma, um conteúdo malicioso armazenado
+                pode voltar a ser interpretado pelo navegador
+                sempre que a página for carregada.
+            </p>
+
+            <p>
+                Na <strong>Defesa Ativa</strong>,
+                conteúdos identificados como XSS podem ser
+                rejeitados antes de serem armazenados.
+            </p>
+
+            <p>
+                Ao habilitar a Defesa Ativa, o CCTE também
+                executa a limpeza dos comentários armazenados
+                que forem identificados como conteúdo XSS.
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- BOTÃO DE AJUDA -->
+
+    <button
+        class="help-fab"
+        id="helpBtn"
+        type="button"
+        title="Ajuda"
+        aria-label="Abrir ajuda"
+    >
+        ?
+    </button>
+
+
+    <!-- JANELA DE AJUDA -->
+
+    <div
+        class="help-modal"
+        id="helpModal"
+        style="display: none;"
+    >
+
+        <div class="help-card">
+
+
+            <div class="help-header">
+
+                <strong>
+                    COMENTÁRIOS — VULNERABILIDADE DISPONÍVEL
+                </strong>
+
+                <button
+                    class="help-close"
+                    id="helpClose"
+                    type="button"
+                    aria-label="Fechar ajuda"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="help-body">
+
+
+                <h3>
+                    Stored XSS
+                </h3>
+
+                <p>
+                    Stored Cross-Site Scripting ocorre quando
+                    um conteúdo potencialmente executável é
+                    armazenado pela aplicação e posteriormente
+                    apresentado a outros acessos sem tratamento
+                    adequado.
+                </p>
+
+
+                <h3>
+                    Implementação no CCTE
+                </h3>
+
+                <p>
+                    O conteúdo enviado pelo campo de comentário
+                    é armazenado no banco de dados e posteriormente
+                    exibido de forma propositalmente insegura.
+                </p>
+
+                <p>
+                    Isso permite observar a diferença entre
+                    simplesmente armazenar um texto e permitir
+                    que o navegador interprete esse conteúdo.
+                </p>
+
+
+                <h3>
+                    Teste manual
+                </h3>
+
+                <ol>
+
+                    <li>
+                        Informe um nome para identificar
+                        o comentário.
+                    </li>
+
+                    <li>
+                        Publique um conteúdo contendo
+                        código HTML ou JavaScript.
+                    </li>
+
+                    <li>
+                        Observe o comportamento da página
+                        após a publicação.
+                    </li>
+
+                    <li>
+                        Recarregue a página e verifique
+                        se o efeito continua presente.
+                    </li>
+
+                    <li>
+                        Consulte posteriormente o
+                        Audit Log e o Security Log.
+                    </li>
+
+                </ol>
+
+
+                <p>
+                    <strong>Exemplo didático:</strong>
+                </p>
+
+                <pre>&lt;script&gt;alert('XSS')&lt;/script&gt;</pre>
+
+
+                <h3>
+                    Comparação dos modos
+                </h3>
+
+                <p>
+                    No <strong>Modo Educacional</strong>,
+                    o conteúdo pode alcançar a implementação
+                    vulnerável e permanecer armazenado.
+                </p>
+
+                <p>
+                    Na <strong>Defesa Ativa</strong>,
+                    uma tentativa identificada como XSS
+                    pode ser rejeitada antes da gravação.
+                </p>
+
+                <p>
+                    A alternância para Defesa Ativa também
+                    permite observar a remoção de conteúdos
+                    XSS previamente armazenados.
+                </p>
+
+
+                <p
+                    style="
+                        margin-top: 10px;
+                        font-size: 0.9em;
+                        opacity: 0.9;
+                    "
+                >
+                    As técnicas apresentadas devem ser utilizadas
+                    exclusivamente no ambiente local e educacional
+                    disponibilizado pelo CCTE.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SCRIPT DA JANELA DE AJUDA -->
+
+    <script>
+
+        const helpBtn =
+            document.getElementById("helpBtn");
+
+        const helpModal =
+            document.getElementById("helpModal");
+
+        const helpClose =
+            document.getElementById("helpClose");
+
+
+        helpBtn.addEventListener(
+            "click",
+            () => {
+
+                helpModal.style.display = "block";
+
+            }
+        );
+
+
+        helpClose.addEventListener(
+            "click",
+            () => {
+
+                helpModal.style.display = "none";
+
+            }
+        );
+
+
+        helpModal.addEventListener(
+            "click",
+            (e) => {
+
+                if (e.target === helpModal) {
+
+                    helpModal.style.display = "none";
+
+                }
+
+            }
+        );
+
+
+        document.addEventListener(
+            "keydown",
+            (e) => {
+
+                if (e.key === "Escape") {
+
+                    helpModal.style.display = "none";
+
+                }
+
+            }
+        );
+
+    </script>
+
+
+    <footer class="footer">
+
+        <small>
+            Trabalho de Conclusão de Curso —
+            Análise e Desenvolvimento de Sistemas
+        </small>
+
+        <small>
+            Professora Orientadora: Josiane Fontoura
+            &nbsp;|&nbsp;
+            Coordenador do Curso: Marcelo Rosa
+        </small>
+
+        <small>
+            2026 • CCTE • Ambiente educacional —
+            Vinícius Dorneles Ferreira
+        </small>
+
+    </footer>
+
+
+</body>
+
+</html>

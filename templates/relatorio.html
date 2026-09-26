@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        CCTE - Relatório Forense
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="lab-banner">
+
+        <strong>CCTE — RELATÓRIO FORENSE</strong>
+
+        —
+        Consolidação automática dos eventos registrados
+        durante as atividades do laboratório.
+
+    </div>
+
+
+    <h1>
+        CCTE - Relatório Forense
+    </h1>
+
+
+    <div class="nav">
+
+        <a href="/index">INÍCIO</a> |
+        <a href="/login">LOGIN</a> |
+        <a href="/registro">CADASTRO</a> |
+        <a href="/perfil">PERFIL</a> |
+        <a href="/comentarios">COMENTÁRIOS</a> |
+        <a href="/download">DOWNLOADS</a> |
+        <a href="/modo">MODO</a> |
+        <a href="/forense">FORENSE</a> |
+        <a href="/reset">RESTAURAR</a> |
+        <a href="/logout">SAIR</a>
+
+    </div>
+
+
+    <div class="card">
+
+        <p>
+            <strong>Modo operacional atual:</strong>
+            {{ modo_atual_global }}
+        </p>
+
+    </div>
+
+
+    <main class="container">
+
+
+        <div class="card">
+
+            <h2>
+                Análise consolidada
+            </h2>
+
+            <p>
+                O Relatório Forense apresenta uma consolidação
+                automática dos registros de auditoria e segurança
+                produzidos durante a utilização do CCTE.
+            </p>
+
+            <p>
+                As informações são obtidas a partir do
+                Audit Log e do Security Log e processadas pelo
+                módulo forense para permitir a análise conjunta
+                dos eventos observados.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Navegação forense
+            </h2>
+
+            <p>
+                <a
+                    href="/forense"
+                    class="btn"
+                >
+                    Painel Forense
+                </a>
+            </p>
+
+            <p>
+                <a
+                    href="/forense/audit"
+                    class="btn"
+                >
+                    Audit Log
+                </a>
+            </p>
+
+            <p>
+                <a
+                    href="/forense/security"
+                    class="btn"
+                >
+                    Security Log
+                </a>
+            </p>
+
+            <p>
+                <a
+                    href="/forense/relatorio"
+                    class="btn"
+                >
+                    Relatório Forense
+                </a>
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Exportar relatório
+            </h2>
+
+            <p>
+                O relatório pode ser exportado em formato
+                de texto para documentação, preservação
+                dos resultados ou análise externa.
+            </p>
+
+            <p>
+                A versão TXT contém o período analisado,
+                totais, resumo automático, categorias de ataque,
+                ações defensivas, eventos de modo operacional,
+                endereços IP, endpoints e timeline resumida.
+            </p>
+
+            <a
+                href="/forense/relatorio/txt"
+                class="btn"
+            >
+                Baixar relatório TXT
+            </a>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Período analisado
+            </h2>
+
+
+            {% if dados.periodo.inicio and dados.periodo.fim %}
+
+                <p>
+                    <strong>Início:</strong>
+                    {{ dados.periodo.inicio }}
+                </p>
+
+                <p>
+                    <strong>Fim:</strong>
+                    {{ dados.periodo.fim }}
+                </p>
+
+            {% else %}
+
+                <p>
+                    Não existem eventos suficientes
+                    para determinar o período analisado.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Totais
+            </h2>
+
+            <p>
+                <strong>Eventos de auditoria:</strong>
+                {{ dados.totais.audit }}
+            </p>
+
+            <p>
+                <strong>Eventos de segurança:</strong>
+                {{ dados.totais.security }}
+            </p>
+
+            <p>
+                <strong>Total de eventos:</strong>
+                {{ dados.totais.eventos }}
+            </p>
+
+            <p>
+                <strong>Ataques classificados:</strong>
+                {{ dados.totais.ataques }}
+            </p>
+
+            <p>
+                <strong>Eventos defensivos:</strong>
+                {{ dados.totais.defesas }}
+            </p>
+
+            <p>
+                <strong>Eventos de modo operacional:</strong>
+                {{ dados.totais.eventos_modo }}
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Resumo automático
+            </h2>
+
+
+            {% if dados.resumo %}
+
+                <p style="white-space: pre-line;">
+                    {{ dados.resumo }}
+                </p>
+
+            {% else %}
+
+                <p>
+                    Não foi possível gerar um resumo
+                    automático para o período analisado.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Ataques por categoria
+            </h2>
+
+            <p>
+                Quantidade de classificações identificadas
+                nos eventos registrados pelo Security Log.
+            </p>
+
+
+            {% if dados.ataques %}
+
+                <table class="log-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Categoria
+                            </th>
+
+                            <th>
+                                Quantidade
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for tipo, quantidade in dados.ataques.items() %}
+
+                            <tr>
+
+                                <td>
+                                    <strong>
+                                        {{ tipo }}
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    {{ quantidade }}
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            {% else %}
+
+                <p>
+                    Nenhum ataque foi identificado
+                    no período analisado.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Ações defensivas
+            </h2>
+
+            <p>
+                Esta seção apresenta eventos registrados
+                durante a atuação dos mecanismos automáticos
+                da Defesa Ativa.
+            </p>
+
+            <p>
+                Os registros podem representar bloqueios,
+                rejeições de conteúdo, limitações temporárias
+                de requisições e outras respostas defensivas
+                executadas pelo sistema.
+            </p>
+
+
+            {% if dados.defesas %}
+
+                <table class="log-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Evento defensivo
+                            </th>
+
+                            <th>
+                                Quantidade
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for tipo, quantidade in dados.defesas.items() %}
+
+                            <tr>
+
+                                <td>
+                                    <strong>
+                                        {{ tipo }}
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    {{ quantidade }}
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            {% else %}
+
+                <p>
+                    Nenhuma ação defensiva foi registrada
+                    no período analisado.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Eventos de modo operacional
+            </h2>
+
+            <p>
+                Esta seção apresenta registros relacionados
+                à seleção, alteração ou tentativa de alteração
+                do modo operacional do CCTE.
+            </p>
+
+            <p>
+                Esses eventos auxiliam na identificação
+                do contexto operacional em que as tentativas
+                de ataque e as respostas defensivas ocorreram.
+            </p>
+
+
+            {% if dados.modos %}
+
+                <table class="log-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Evento
+                            </th>
+
+                            <th>
+                                Quantidade
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for tipo, quantidade in dados.modos.items() %}
+
+                            <tr>
+
+                                <td>
+                                    <strong>
+                                        {{ tipo }}
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    {{ quantidade }}
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            {% else %}
+
+                <p>
+                    Nenhum evento de modo operacional
+                    foi registrado no período analisado.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Endereços IP envolvidos
+            </h2>
+
+            <p>
+                A tabela apresenta os endereços IP encontrados
+                nos registros analisados e a quantidade de
+                eventos associados a cada endereço.
+            </p>
+
+
+            {% if dados.ips %}
+
+                <table class="log-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Endereço IP
+                            </th>
+
+                            <th>
+                                Eventos
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for ip, quantidade in dados.ips.items() %}
+
+                            <tr>
+
+                                <td>
+                                    {{ ip }}
+                                </td>
+
+                                <td>
+                                    {{ quantidade }}
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            {% else %}
+
+                <p>
+                    Nenhum endereço IP foi identificado
+                    nos registros analisados.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Endpoints atingidos
+            </h2>
+
+            <p>
+                Esta seção apresenta os recursos da aplicação
+                associados aos eventos classificados como
+                suspeitos ou potencialmente maliciosos.
+            </p>
+
+
+            {% if dados.endpoints %}
+
+                <table class="log-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Endpoint
+                            </th>
+
+                            <th>
+                                Eventos
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for endpoint, quantidade in dados.endpoints.items() %}
+
+                            <tr>
+
+                                <td>
+                                    <code>
+                                        {{ endpoint }}
+                                    </code>
+                                </td>
+
+                                <td>
+                                    {{ quantidade }}
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            {% else %}
+
+                <p>
+                    Nenhum endpoint associado a eventos
+                    de segurança foi identificado.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Timeline resumida
+            </h2>
+
+            <p>
+                A timeline apresenta uma sequência cronológica
+                dos eventos considerados mais relevantes para
+                reconstrução das atividades observadas
+                no ambiente.
+            </p>
+
+            <p>
+                Ela pode reunir detecções de segurança,
+                eventos operacionais, alterações do modo
+                e respostas executadas pela Defesa Ativa.
+            </p>
+
+
+            {% if dados.timeline %}
+
+                <table class="log-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Data / Hora
+                            </th>
+
+                            <th>
+                                Origem
+                            </th>
+
+                            <th>
+                                Tipo
+                            </th>
+
+                            <th>
+                                IP
+                            </th>
+
+                            <th>
+                                Resumo
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for evento in dados.timeline %}
+
+                            <tr>
+
+                                <td>
+                                    {{ evento.timestamp }}
+                                </td>
+
+
+                                <td>
+
+                                    {% if evento.origem == "security" %}
+
+                                        Segurança
+
+                                    {% else %}
+
+                                        Auditoria
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <td>
+
+                                    <strong>
+                                        {{ evento.tipo }}
+                                    </strong>
+
+                                </td>
+
+
+                                <td>
+                                    {{ evento.ip }}
+                                </td>
+
+
+                                <td>
+
+                                    {% if evento.resumo %}
+
+                                        {{ evento.resumo }}
+
+                                    {% else %}
+
+                                        -
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            {% else %}
+
+                <p>
+                    Nenhum evento relevante está disponível
+                    para construção da timeline.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Interpretação do relatório
+            </h2>
+
+            <p>
+                O relatório é produzido automaticamente
+                a partir dos registros mantidos pelo
+                Audit Log e pelo Security Log.
+            </p>
+
+            <p>
+                O <strong>Audit Log</strong>
+                representa acontecimentos operacionais
+                e ações realizadas pelo próprio sistema.
+            </p>
+
+            <p>
+                O <strong>Security Log</strong>
+                representa requisições classificadas
+                pelo mecanismo de monitoramento como
+                comportamentos suspeitos ou tentativas
+                de ataque.
+            </p>
+
+            <p>
+                Os eventos defensivos representam respostas
+                automáticas executadas quando a
+                <strong>Defesa Ativa</strong> está habilitada.
+            </p>
+
+            <p>
+                Os eventos de modo operacional permitem
+                contextualizar em qual configuração do ambiente
+                determinada atividade foi observada.
+            </p>
+
+            <p>
+                As classificações apresentadas representam
+                detecções produzidas pelo CCTE e não devem ser
+                interpretadas isoladamente como evidência
+                de comprometimento efetivo do sistema.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Preservação dos resultados
+            </h2>
+
+            <p>
+                Os dados apresentados pertencem à sessão
+                atual do laboratório.
+            </p>
+
+            <p>
+                A função
+                <strong>Restaurar ambiente</strong>
+                remove os registros anteriores e inicia
+                uma nova sessão experimental.
+            </p>
+
+            <p>
+                Caso seja necessário preservar os resultados
+                de uma atividade, exporte o relatório TXT
+                antes de executar a restauração.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Consultar registros completos
+            </h2>
+
+            <p>
+                Para uma análise detalhada dos eventos,
+                consulte diretamente os registros completos.
+            </p>
+
+            <p>
+                <a
+                    href="/forense/audit"
+                    class="btn"
+                >
+                    Abrir Audit Log
+                </a>
+            </p>
+
+            <p>
+                <a
+                    href="/forense/security"
+                    class="btn"
+                >
+                    Abrir Security Log
+                </a>
+            </p>
+
+            <p>
+                <a
+                    href="/forense"
+                    class="btn"
+                >
+                    Voltar ao Painel Forense
+                </a>
+            </p>
+
+        </div>
+
+
+    </main>
+
+
+    <footer class="footer">
+
+        <small>
+            Trabalho de Conclusão de Curso —
+            Análise e Desenvolvimento de Sistemas
+        </small>
+
+        <small>
+            Professora Orientadora: Josiane Fontoura
+            &nbsp;|&nbsp;
+            Coordenador do Curso: Marcelo Rosa
+        </small>
+
+        <small>
+            2026 • CCTE • Ambiente educacional —
+            Vinícius Dorneles Ferreira
+        </small>
+
+    </footer>
+
+
+</body>
+
+</html>

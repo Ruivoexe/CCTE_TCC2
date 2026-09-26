@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        CCTE - Login
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="lab-banner">
+
+        <strong>ZONA DE TESTE VULNERÁVEL</strong>
+
+        —
+        Ambiente propositalmente vulnerável para fins
+        educacionais e experimentação controlada.
+
+    </div>
+
+
+    <h1>
+        CCTE - Login
+    </h1>
+
+
+    <div class="nav">
+
+        <a href="/index">INÍCIO</a> |
+        <a href="/login">LOGIN</a> |
+        <a href="/registro">CADASTRO</a> |
+        <a href="/perfil">PERFIL</a> |
+        <a href="/comentarios">COMENTÁRIOS</a> |
+        <a href="/download">DOWNLOADS</a> |
+        <a href="/modo">MODO</a> |
+        <a href="/forense">FORENSE</a> |
+        <a href="/reset">RESTAURAR</a> |
+        <a href="/logout">SAIR</a>
+
+    </div>
+
+
+    <div class="card">
+
+        <p>
+            <strong>Modo operacional atual:</strong>
+            {{ modo_atual_global }}
+        </p>
+
+    </div>
+
+
+    <div class="container">
+
+
+        <div class="card">
+
+            <h2>
+                Autenticação
+            </h2>
+
+            <p>
+                Utilize as credenciais cadastradas no laboratório
+                para acessar o perfil de usuário.
+            </p>
+
+            <p>
+                Esta área contém vulnerabilidades implementadas
+                intencionalmente para permitir o estudo de
+                <strong>SQL Injection</strong> e
+                <strong>Brute Force</strong>.
+            </p>
+
+
+            <form
+                method="POST"
+                action="/login"
+            >
+
+                <label for="username">
+                    Nome de usuário
+                </label>
+
+                <br>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Nome de usuário"
+                    autocomplete="username"
+                >
+
+
+                <br><br>
+
+
+                <label for="password">
+                    Senha
+                </label>
+
+                <br>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Senha"
+                    autocomplete="current-password"
+                >
+
+
+                <br><br>
+
+
+                <button
+                    type="submit"
+                    class="btn"
+                >
+                    Entrar
+                </button>
+
+            </form>
+
+
+            {% if erro %}
+
+                <div class="card">
+
+                    <p>
+                        <strong>
+                            Erro de autenticação:
+                        </strong>
+
+                        {{ erro }}
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+
+            <p>
+                Ainda não possui uma conta?
+                <a href="/registro">
+                    Criar conta
+                </a>
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Comportamento educacional
+            </h2>
+
+            <p>
+                No <strong>Modo Educacional</strong>,
+                as vulnerabilidades permanecem exploráveis
+                enquanto as tentativas de ataque são monitoradas
+                e registradas.
+            </p>
+
+            <p>
+                Na <strong>Defesa Ativa</strong>,
+                o mesmo fluxo de autenticação permanece sob
+                monitoramento, mas mecanismos automáticos de
+                resposta podem bloquear ou limitar requisições
+                consideradas maliciosas.
+            </p>
+
+            <p>
+                A comparação entre os dois modos permite observar
+                as diferenças entre vulnerabilidade, detecção
+                e mitigação.
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- BOTÃO DE AJUDA -->
+
+    <button
+        class="help-fab"
+        id="helpBtn"
+        type="button"
+        title="Ajuda"
+        aria-label="Abrir ajuda"
+    >
+        ?
+    </button>
+
+
+    <!-- JANELA DE AJUDA -->
+
+    <div
+        class="help-modal"
+        id="helpModal"
+        style="display: none;"
+    >
+
+        <div class="help-card">
+
+
+            <div class="help-header">
+
+                <strong>
+                    LOGIN — VULNERABILIDADES DISPONÍVEIS
+                </strong>
+
+                <button
+                    class="help-close"
+                    id="helpClose"
+                    type="button"
+                    aria-label="Fechar ajuda"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="help-body">
+
+
+                <h3>
+                    SQL Injection
+                </h3>
+
+                <p>
+                    A aplicação constrói a consulta SQL utilizando
+                    diretamente os valores informados durante
+                    a autenticação.
+                </p>
+
+                <p>
+                    Essa implementação intencional permite observar
+                    como entradas manipuladas podem alterar a lógica
+                    prevista pela consulta.
+                </p>
+
+
+                <p>
+                    <strong>Exemplo didático:</strong>
+                </p>
+
+                <code>
+                    ' OR 1=1 --
+                </code>
+
+
+                <h3>
+                    Brute Force
+                </h3>
+
+                <p>
+                    Múltiplas tentativas de autenticação realizadas
+                    em sequência permitem observar o comportamento
+                    do mecanismo de detecção de Brute Force.
+                </p>
+
+                <p>
+                    As ocorrências identificadas podem ser
+                    posteriormente analisadas no
+                    <strong>Security Log</strong>
+                    e no módulo forense.
+                </p>
+
+
+                <h3>
+                    Comparação dos modos
+                </h3>
+
+                <p>
+                    Execute os testes inicialmente no
+                    <strong>Modo Educacional</strong>
+                    e depois repita-os com a
+                    <strong>Defesa Ativa</strong>
+                    habilitada.
+                </p>
+
+                <p>
+                    Dessa forma, é possível comparar
+                    exploração, detecção, registro e
+                    resposta defensiva.
+                </p>
+
+
+                <p
+                    style="
+                        margin-top: 10px;
+                        font-size: 0.9em;
+                        opacity: 0.9;
+                    "
+                >
+                    As técnicas apresentadas devem ser utilizadas
+                    exclusivamente no ambiente local e educacional
+                    disponibilizado pelo CCTE.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SCRIPT DA JANELA DE AJUDA -->
+
+    <script>
+
+        const helpBtn =
+            document.getElementById("helpBtn");
+
+        const helpModal =
+            document.getElementById("helpModal");
+
+        const helpClose =
+            document.getElementById("helpClose");
+
+
+        helpBtn.addEventListener(
+            "click",
+            () => {
+
+                helpModal.style.display = "block";
+
+            }
+        );
+
+
+        helpClose.addEventListener(
+            "click",
+            () => {
+
+                helpModal.style.display = "none";
+
+            }
+        );
+
+
+        helpModal.addEventListener(
+            "click",
+            (e) => {
+
+                if (e.target === helpModal) {
+
+                    helpModal.style.display = "none";
+
+                }
+
+            }
+        );
+
+
+        document.addEventListener(
+            "keydown",
+            (e) => {
+
+                if (e.key === "Escape") {
+
+                    helpModal.style.display = "none";
+
+                }
+
+            }
+        );
+
+    </script>
+
+
+    <footer class="footer">
+
+        <small>
+            Trabalho de Conclusão de Curso —
+            Análise e Desenvolvimento de Sistemas
+        </small>
+
+        <small>
+            Professora Orientadora: Josiane Fontoura
+            &nbsp;|&nbsp;
+            Coordenador do Curso: Marcelo Rosa
+        </small>
+
+        <small>
+            2026 • CCTE • Ambiente educacional —
+            Vinícius Dorneles Ferreira
+        </small>
+
+    </footer>
+
+
+</body>
+
+</html>
