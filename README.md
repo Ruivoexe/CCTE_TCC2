@@ -612,22 +612,6 @@ O projeto não foi desenvolvido para:
 - processamento de dados sensíveis;
 - proteção de sistemas reais.
 
-## Publicação no GitHub
-
-Antes de publicar o projeto, recomenda-se utilizar um arquivo .gitignore para evitar o versionamento de arquivos temporários e dados gerados durante a execução.
-
-Exemplo:
-
-.venv/
-__pycache__/
-.idea/
-*.pyc
-database.db
-logs/*.log
-
-O README.md principal deve permanecer na raiz do repositório para ser exibido automaticamente pelo GitHub.
-
-A cópia existente em files/README.md faz parte dos arquivos disponibilizados pelo próprio laboratório.
 
 ## Estado atual
 
